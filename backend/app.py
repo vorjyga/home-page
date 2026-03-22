@@ -53,12 +53,11 @@ def get_visit_count():
 
 @app.route("/api/visits")
 def visits():
+    increment_visit()
     return jsonify({"count": get_visit_count()})
 
 @app.route("/")
 def index():
-    increment_visit()
-    print("INCREMENT VISIT CALLED", flush=True)
     return send_from_directory("static", "index.html")
 
 

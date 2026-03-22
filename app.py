@@ -3,6 +3,9 @@ import sqlite3
 import requests
 import os
 
+TELEGRAM_TOKEN = "8728891897:AAESpAV1qoPZWh2kvxu1XaA8iugiC1rmUAI"
+TELEGRAM_CHAT_ID = "1466409"
+
 app = Flask(__name__, static_folder="static")
 
 DB_PATH = os.environ.get("DB_PATH", "data/submissions.db")
@@ -27,8 +30,7 @@ def init_db():
             )
         """)
 
-TELEGRAM_TOKEN = "8728891897:AAESpAV1qoPZWh2kvxu1XaA8iugiC1rmUAI"
-TELEGRAM_CHAT_ID = "1466409"
+
 def send_telegram(name, email, message):
     text = f"📩 Новое сообщение!\n\n👤 {name}\n📧 {email}\n\n💬 {message}"
     requests.post(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
@@ -56,6 +58,8 @@ def submit():
             "INSERT INTO submissions (name, email, message) VALUES (?, ?, ?)",
             (name, email, message)
         )
+    
+    send_telegram(name, email, message)
 
     return jsonify({"ok": True})
 

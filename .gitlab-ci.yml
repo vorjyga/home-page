@@ -1,13 +1,28 @@
 stages:
   - deploy
 
-deploy:
+deploy-frontend:
   stage: deploy
   tags:
     - vultr_group
   only:
     - main
+  changes:
+    - frontend/**/*
   script:
     - rsync -a --exclude='.git' . /home/gitlab-runner/homyak/
     - cd /home/gitlab-runner/homyak
-    - docker compose up -d --build
+    - docker compose up -d --build frontend
+
+deploy-backend:
+  stage: deploy
+  tags:
+    - vultr_group
+  only:
+    - main
+  changes:
+    - backend/**/*
+  script:
+    - rsync -a --exclude='.git' . /home/gitlab-runner/homyak/
+    - cd /home/gitlab-runner/homyak
+    - docker compose up -d --build backend

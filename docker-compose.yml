@@ -1,8 +1,6 @@
 services:
-  web:
-    build: .
-    volumes:
-      - ./data:/app/data
+  frontend:
+    build: ./frontend
     restart: unless-stopped
     networks:
       - web
@@ -11,7 +9,21 @@ services:
       - "traefik.http.routers.homyak.rule=Host(`novaikin.com`)"
       - "traefik.http.routers.homyak.entrypoints=websecure"
       - "traefik.http.routers.homyak.tls.certresolver=letsencrypt"
-      - "traefik.http.services.homyak.loadbalancer.server.port=5000"
+      - "traefik.http.services.homyak.loadbalancer.server.port=3000"
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    volumes:
+      - ./backend/data:/app/data
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homyak-api.rule=Host(`novaikin.com`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.homyak-api.entrypoints=websecure"
+      - "traefik.http.routers.homyak-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.homyak-api.loadbalancer.server.port=5000"
 
 networks:
   web:

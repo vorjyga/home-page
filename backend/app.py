@@ -34,14 +34,16 @@ def init_db():
 
 
 def increment_visit():
-    with get_db() as conn:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS visits (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                visited_at TEXT NOT NULL DEFAULT (datetime('now'))
-            )
-        """)
-        conn.execute("INSERT INTO visits (visited_at) VALUES (datetime('now'))")
+    conn = get_db()
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS visits (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            visited_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+    conn.execute("INSERT INTO visits (visited_at) VALUES (datetime('now'))")
+    conn.commit()
+    conn.close()
 
 def get_visit_count():
     with get_db() as conn:

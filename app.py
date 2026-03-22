@@ -1,10 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 import sqlite3
-import requests
 import os
-
-TELEGRAM_TOKEN = "8728891897:AAESpAV1qoPZWh2kvxu1XaA8iugiC1rmUAI"
-TELEGRAM_CHAT_ID = "1466409"
+from telegram_bot import send_telegram, handle_webhook
 
 app = Flask(__name__, static_folder="static")
 
@@ -30,13 +27,6 @@ def init_db():
             )
         """)
 
-
-def send_telegram(name, email, message):
-    text = f"📩 Новое сообщение!\n\n👤 {name}\n📧 {email}\n\n💬 {message}"
-    requests.post(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
-        json={"chat_id": TELEGRAM_CHAT_ID, "text": text})
-
-
 @app.route("/")
 def index():
     return send_from_directory("static", "index.html")
@@ -61,6 +51,11 @@ def submit():
     
     send_telegram(name, email, message)
 
+    return jsonify({"ok": True})
+
+@app.route("/api/telegram/webhook", methods=["POST"])
+def telegram_webhook():
+    handle_webhook(request.get_json())
     return jsonify({"ok": True})
 
 

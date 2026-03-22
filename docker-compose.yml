@@ -15,7 +15,7 @@ services:
     build: ./backend
     restart: unless-stopped
     volumes:
-      - ./backend/data:/app/data
+      - /var/data/homyak:/app/data
     networks:
       - web
     labels:

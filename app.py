@@ -27,7 +27,7 @@ def init_db():
             )
         """)
 
-def get_visit_count():
+def increment_visit():
     with get_db() as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS visits (
@@ -36,6 +36,9 @@ def get_visit_count():
             )
         """)
         conn.execute("INSERT INTO visits (visited_at) VALUES (datetime('now'))")
+
+def get_visit_count():
+    with get_db() as conn:
         count = conn.execute("SELECT COUNT(*) FROM visits").fetchone()[0]
     return count
 
@@ -46,7 +49,7 @@ def visits():
 
 @app.route("/")
 def index():
-    get_visit_count()
+    increment_visit()
     return send_from_directory("static", "index.html")
 
 

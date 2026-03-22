@@ -5,8 +5,7 @@ services:
       - ./data:/app/data
     restart: unless-stopped
     networks:
-      - matrix_default
-      - default
+      - web
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.homyak.rule=Host(`novaikin.com`)"
@@ -15,5 +14,5 @@ services:
       - "traefik.http.services.homyak.loadbalancer.server.port=5000"
 
 networks:
-  matrix_default:
+  web:
     external: true

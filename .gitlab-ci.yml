@@ -3,6 +3,8 @@ stages:
 
 deploy:
   stage: deploy
+  tags:
+    - vultr_group
   only:
     - main
   script:

@@ -377,5 +377,13 @@
     }
   </script>
 
+  <script>
+  fetch('/api/visits')
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('visitCounter').textContent = '👁 ' + data.count;
+    });
+</script>
+
 </body>
 </html>

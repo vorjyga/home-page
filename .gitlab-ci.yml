@@ -8,6 +8,6 @@ deploy:
   only:
     - main
   script:
-    - cp -r . /home/gitlab-runner/homyak
+    - cp -r --exclude=.git . /home/gitlab-runner/homyak
     - cd /home/gitlab-runner/homyak
     - docker compose up -d --build

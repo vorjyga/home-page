@@ -58,6 +58,7 @@ def visits():
 @app.route("/")
 def index():
     increment_visit()
+    print("INCREMENT VISIT CALLED", flush=True)
     return send_from_directory("static", "index.html")
 
 

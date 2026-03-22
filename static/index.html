@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Чо хотел?</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a0f;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      font-family: 'Arial Black', 'Impact', sans-serif;
+      padding: 40px 20px 60px;
+      gap: 60px;
+    }
+
+
+    .stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Glow halo behind text */
+    .glow-ring {
+      position: absolute;
+      width: 500px;
+      height: 160px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow:
+        0 0 80px 30px rgba(255, 100, 200, 0.15),
+        0 0 160px 60px rgba(100, 200, 255, 0.10);
+      opacity: 0;
+      animation: glowAppear 0.8s ease-out 2.4s forwards;
+      pointer-events: none;
+    }
+
+    @keyframes glowAppear {
+      to { opacity: 1; }
+    }
+
+    /* Main text wrapper — starts at bottom-left corner, flies to center */
+    .text-wrapper {
+      position: relative;
+      opacity: 0;
+      transform: translate(-48vw, 48vh) rotate(-18deg) scale(0.3);
+      animation: flyToCenter 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.8s forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes flyToCenter {
+      0% {
+        opacity: 0;
+        transform: translate(-48vw, 48vh) rotate(-18deg) scale(0.3);
+        filter: blur(12px);
+      }
+      40% {
+        opacity: 1;
+        filter: blur(3px);
+      }
+      70% {
+        transform: translate(4%, -3%) rotate(3deg) scale(1.08);
+        filter: blur(0px);
+      }
+      85% {
+        transform: translate(-2%, 2%) rotate(-1.5deg) scale(0.97);
+      }
+      93% {
+        transform: translate(1%, -1%) rotate(0.5deg) scale(1.02);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        filter: blur(0px);
+      }
+    }
+
+    /* The actual text */
+    .rainbow-text {
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      white-space: nowrap;
+      text-transform: none;
+
+      background: linear-gradient(
+        90deg,
+        #ff0080,
+        #ff4500,
+        #ffd700,
+        #00e676,
+        #00bcd4,
+        #651fff,
+        #ff0080,
+        #ff4500
+      );
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      animation:
+        rainbowShift 3s linear 2.4s infinite,
+        textPulse 2.8s ease-in-out 2.4s infinite;
+
+      /* Crisp shadow via filter */
+      filter: drop-shadow(0 0 20px rgba(255, 80, 180, 0.7))
+              drop-shadow(0 0 50px rgba(80, 200, 255, 0.4));
+    }
+
+    @keyframes rainbowShift {
+      0%   { background-position: 0% center; }
+      100% { background-position: 300% center; }
+    }
+
+    @keyframes textPulse {
+      0%, 100% {
+        filter: drop-shadow(0 0 18px rgba(255, 80, 180, 0.75))
+                drop-shadow(0 0 45px rgba(80, 200, 255, 0.45));
+        letter-spacing: 0.04em;
+      }
+      50% {
+        filter: drop-shadow(0 0 32px rgba(255, 200, 80, 0.85))
+                drop-shadow(0 0 70px rgba(150, 80, 255, 0.55));
+        letter-spacing: 0.07em;
+      }
+    }
+
+    /* Sparkle particles that burst when text lands */
+    .sparks {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      animation: sparksAppear 0.1s ease 2.3s forwards;
+    }
+
+    @keyframes sparksAppear {
+      to { opacity: 1; }
+    }
+
+    .spark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: sparkFly var(--d) ease-out var(--delay) 1 forwards;
+      opacity: 0;
+    }
+
+    @keyframes sparkFly {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translate(0, 0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0);
+      }
+    }
+
+    /* Trailing ghost text (echo effect after landing) */
+    .echo {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .echo-text {
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+      opacity: 0;
+      animation: echoRipple 2s ease-out 2.35s 1 forwards;
+    }
+
+    @keyframes echoRipple {
+      0%   { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.45); }
+    }
+
+    /* ── Form ── */
+    .contact-form {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: formAppear 0.8s ease-out 3.2s forwards;
+    }
+
+    @keyframes formAppear {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: #e8e8f0;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      resize: none;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(180, 100, 255, 0.6);
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 0 0 3px rgba(150, 80, 255, 0.15),
+                  0 0 20px rgba(150, 80, 255, 0.1);
+    }
+
+    .contact-form textarea {
+      height: 120px;
+      line-height: 1.5;
+    }
+
+    .contact-form button {
+      align-self: flex-end;
+      padding: 13px 36px;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Arial Black', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(90deg, #ff0080, #ff4500, #ffd700, #00e676, #00bcd4, #651fff);
+      background-size: 300% auto;
+      animation: btnRainbow 3s linear infinite;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 24px rgba(150, 80, 255, 0.3);
+    }
+
+    @keyframes btnRainbow {
+      0%   { background-position: 0% center; }
+      100% { background-position: 300% center; }
+    }
+
+    .contact-form button:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 8px 32px rgba(150, 80, 255, 0.5);
+    }
+
+    .contact-form button:active {
+      transform: translateY(0) scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stage">
+
+    <!-- Glow halo -->
+    <div class="glow-ring"></div>
+
+    <!-- Echo ripple on impact -->
+    <div class="echo">
+      <span class="echo-text">Чо хотел?</span>
+    </div>
+
+    <!-- Spark particles -->
+    <div class="sparks" id="sparks"></div>
+
+    <!-- Main text -->
+    <div class="text-wrapper">
+      <span class="rainbow-text">Чо хотел?</span>
+    </div>
+
+  </div>
+
+  <form class="contact-form" id="contactForm">
+    <input type="text"  id="fieldName"    placeholder="Имя" required />
+    <input type="email" id="fieldEmail"   placeholder="Email" required />
+    <textarea           id="fieldMessage" placeholder="Сообщение" required></textarea>
+    <button type="submit" id="submitBtn">Отослать</button>
+  </form>
+
+  <script>
+    // ── Form submit → fetch API ──
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Отправляем…';
+
+      try {
+        const res = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name:    document.getElementById('fieldName').value,
+            email:   document.getElementById('fieldEmail').value,
+            message: document.getElementById('fieldMessage').value,
+          })
+        });
+        const json = await res.json();
+        if (json.ok) {
+          alert('Отправлено!');
+          this.reset();
+        } else {
+          alert('Ошибка: ' + (json.error || 'что-то пошло не так'));
+        }
+      } catch (err) {
+        alert('Не удалось связаться с сервером');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Отослать';
+      }
+    });
+
+    // ── Spark particles ──
+    const sparks = document.getElementById('sparks');
+    const colors = ['#ff0080','#ff6600','#ffd700','#00ff88','#00cfff','#aa55ff','#ff55aa'];
+    const count = 28;
+
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'spark';
+
+      const angle = (i / count) * 360 + Math.random() * (360 / count);
+      const dist  = 80 + Math.random() * 180;
+      const rad   = angle * Math.PI / 180;
+      const tx    = Math.cos(rad) * dist;
+      const ty    = Math.sin(rad) * dist;
+      const delay = 2.3 + Math.random() * 0.35;
+      const dur   = 0.6 + Math.random() * 0.6;
+      const size  = 4 + Math.random() * 8;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      el.style.setProperty('--tx', tx + 'px');
+      el.style.setProperty('--ty', ty + 'px');
+      el.style.setProperty('--delay', delay + 's');
+      el.style.setProperty('--d', dur + 's');
+      el.style.width  = size + 'px';
+      el.style.height = size + 'px';
+      el.style.background = color;
+      el.style.boxShadow = `0 0 ${size * 2}px ${color}`;
+      el.style.animationDelay = delay + 's';
+
+      sparks.appendChild(el);
+    }
+  </script>
+
+</body>
+</html>

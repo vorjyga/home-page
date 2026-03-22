@@ -14,7 +14,6 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def init_db():
     with get_db() as conn:
         conn.execute("""
@@ -26,7 +25,13 @@ def init_db():
                 created_at TEXT   NOT NULL DEFAULT (datetime('now'))
             )
         """)
-        
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS visits (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                visited_at TEXT NOT NULL DEFAULT (datetime('now'))
+            )
+        """)
+
 
 def increment_visit():
     with get_db() as conn:

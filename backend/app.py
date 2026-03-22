@@ -26,6 +26,7 @@ def init_db():
                 created_at TEXT   NOT NULL DEFAULT (datetime('now'))
             )
         """)
+        
 
 def increment_visit():
     with get_db() as conn:

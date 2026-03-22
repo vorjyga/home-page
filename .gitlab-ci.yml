@@ -1,0 +1,11 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  only:
+    - main
+  script:
+    - cd /home/gitlab-runner/homyak
+    - git pull origin main
+    - docker compose up -d --build

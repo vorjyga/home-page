@@ -1,8 +1,19 @@
 services:
   web:
     build: .
-    ports:
-      - "5000:5000"
     volumes:
       - ./data:/app/data
     restart: unless-stopped
+    networks:
+      - matrix_default
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.homyak.rule=Host(`novaikin.com`)"
+      - "traefik.http.routers.homyak.entrypoints=websecure"
+      - "traefik.http.routers.homyak.tls.certresolver=letsencrypt"
+      - "traefik.http.services.homyak.loadbalancer.server.port=5000"
+
+networks:
+  matrix_default:
+    external: true

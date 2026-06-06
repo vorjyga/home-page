@@ -6,3 +6,5 @@ dist-ssr
 .vscode
 *.log
 .DS_Store
+# проект использует @tailwindcss/vite, postcss-конфиг не нужен и ломает сборку
+postcss.config.*

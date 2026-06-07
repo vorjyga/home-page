@@ -27,13 +27,55 @@ const MIME = {
   '.txt': 'text/plain; charset=utf-8',
 };
 
-function sendFile(res, filePath, status = 200) {
-  return readFile(filePath).then((data) => {
-    res.writeHead(status, {
-      'Content-Type': MIME[extname(filePath)] || 'application/octet-stream',
-    });
-    res.end(data);
+// Файлы в /assets Vite именует по хэшу содержимого — имя меняется при изменении,
+// поэтому их можно кэшировать навсегда. Всё остальное (index.html, фавиконка и т.п.)
+// сохраняет имя между деплоями, поэтому всегда ревалидируем, чтобы изменения
+// подхватывались сразу.
+function cacheControlFor(urlPath) {
+  return urlPath.startsWith('/assets/')
+    ? 'public, max-age=31536000, immutable'
+    : 'no-cache';
+}
+
+function makeEtag(info) {
+  return `"${info.size.toString(16)}-${Math.floor(info.mtimeMs).toString(16)}"`;
+}
+
+async function sendFile(req, res, filePath, urlPath, status = 200) {
+  const info = await stat(filePath);
+  const etag = makeEtag(info);
+  const lastModified = info.mtime.toUTCString();
+  const cacheControl = cacheControlFor(urlPath);
+
+  // Условный запрос -> 304 (If-None-Match приоритетнее If-Modified-Since, RFC 7232)
+  const inm = req.headers['if-none-match'];
+  const ims = req.headers['if-modified-since'];
+  let notModified = false;
+  if (inm !== undefined) {
+    notModified = inm === etag;
+  } else if (ims !== undefined) {
+    notModified =
+      Math.floor(new Date(ims).getTime() / 1000) >= Math.floor(info.mtimeMs / 1000);
+  }
+
+  const validators = {
+    'Cache-Control': cacheControl,
+    'ETag': etag,
+    'Last-Modified': lastModified,
+  };
+
+  if (notModified) {
+    res.writeHead(304, validators);
+    res.end();
+    return;
+  }
+
+  const data = await readFile(filePath);
+  res.writeHead(status, {
+    'Content-Type': MIME[extname(filePath)] || 'application/octet-stream',
+    ...validators,
   });
+  res.end(data);
 }
 
 const server = createServer(async (req, res) => {
@@ -55,10 +97,10 @@ const server = createServer(async (req, res) => {
     }
 
     if (info?.isFile()) {
-      await sendFile(res, filePath);
+      await sendFile(req, res, filePath, urlPath);
     } else {
-      // SPA-fallback: любой неизвестный путь отдаёт index.html
-      await sendFile(res, INDEX, 200);
+      // SPA-fallback: любой неизвестный путь отдаёт index.html (всегда ревалидируем)
+      await sendFile(req, res, INDEX, '/index.html', 200);
     }
   } catch (err) {
     console.error(err);

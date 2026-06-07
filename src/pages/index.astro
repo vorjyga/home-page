@@ -1,0 +1,22 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/base/Header.jsx';
+import Summary from '../components/base/Summary.jsx';
+import Experience from '../components/base/Experience.jsx';
+import Skills from '../components/base/Skills.jsx';
+import Education from '../components/base/Education.jsx';
+import DownloadPdf from '../components/base/DownloadPdf.jsx';
+---
+<Layout title="My resume">
+  <div class="container mx-auto">
+    <div class="mx-auto max-w-3xl px-4 text-justify mb-20 mt-10 print:max-w-none print:px-0 print:mb-0 print:mt-0">
+      <DownloadPdf client:load />
+      <Header />
+      <Summary />
+      <Experience />
+      <Skills />
+      <Education />
+    </div>
+  </div>
+</Layout>

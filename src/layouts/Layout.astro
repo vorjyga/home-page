@@ -1,0 +1,68 @@
+---
+import VariantToggle from '../components/VariantToggle.astro';
+
+// variant: 'light' (base résumé, Tailwind) | 'pixel' (dusk pixel résumé) | 'based' (editorial résumé)
+// | 'warhammer' (grimdark conscription dossier).
+// Tailwind is imported by the base page itself, not here, so it never loads on
+// other routes. Each route only loads its own Google Fonts.
+const { title = 'My resume', variant = 'light' } = Astro.props;
+const isPixel = variant === 'pixel';
+const isBased = variant === 'based';
+const isWarhammer = variant === 'warhammer';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {isPixel && (
+      <Fragment>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </Fragment>
+    )}
+    {isBased && (
+      <Fragment>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+        {/* Apply the saved (or default light) theme before first paint to avoid a flash. */}
+        <script is:inline>
+          (function () {
+            try {
+              var t = localStorage.getItem('cv-theme');
+              document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+            } catch (e) {
+              document.documentElement.setAttribute('data-theme', 'light');
+            }
+          })();
+        </script>
+      </Fragment>
+    )}
+    {isWarhammer && (
+      <Fragment>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Pirata+One&family=Stardos+Stencil:wght@400;700&family=Oswald:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </Fragment>
+    )}
+    <title>{title}</title>
+  </head>
+  <body>
+    <VariantToggle theme={variant === 'pixel' ? 'pixel' : variant === 'based' ? 'based' : variant === 'warhammer' ? 'warhammer' : 'light'} />
+    <slot />
+  </body>
+</html>

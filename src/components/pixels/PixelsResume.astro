@@ -1,0 +1,196 @@
+---
+import './styles/base.css';
+import './styles/dusk.css';
+import {
+  profile,
+  contacts,
+  summary,
+  experience,
+  earlierExperience,
+  skills,
+  education,
+  languages,
+} from '../../data/index.js';
+
+// Accent color per timeline waypoint (top -> bottom), matching the design.
+const ACCENTS = ['#ef9fc0', '#f4a98f', '#f3cf86', '#8fd9bf', '#8aa3e8', '#b79ee6', '#f4a98f'];
+const EARLIER_ACCENT = '#c7b59a';
+
+// Sprite icon + color per contact (presentation detail of the dusk hero).
+const CONTACT_SPRITES = {
+  email: { sprite: 'heart', color: '#ef9fc0' },
+  website: { sprite: 'gem', color: '#8aa3e8' },
+  github: { sprite: 'coin', color: '#f3cf86', co: '#fff6ef' },
+  linkedin: { sprite: 'gem', color: '#8fd9bf' },
+  telegram: { sprite: 'sparkle', color: '#b79ee6' },
+};
+const CONTACT_ORDER = ['email', 'website', 'github', 'linkedin', 'telegram'];
+const heroContacts = CONTACT_ORDER
+  .map((id) => contacts.find((c) => c.id === id))
+  .filter(Boolean);
+
+// Language proficiency bars (design: Russian 100% pink, English 85% peri).
+const LANG_BARS = [
+  { width: '100%', color: '#ef9fc0' },
+  { width: '85%', color: '#8aa3e8' },
+];
+
+const isCurrent = (job) => /present/i.test(job.dates);
+const splitDates = (dates) => {
+  const [range, duration] = dates.split(' · ');
+  return { range, duration };
+};
+const cleanLevel = (level) =>
+  level.replace(/^—\s*/, '').replace(/\s*—\s*/g, ' · ').toUpperCase();
+---
+
+<div class="sky">
+  <div class="mtns">
+    <div class="mtn m1"></div>
+    <div class="mtn m2"></div>
+    <div class="mtn m3"></div>
+  </div>
+</div>
+<div class="sky" data-pixel-field="sparkle,#fff3da,10,3,4; star4,#ffe1b0,5,3,5; gem,#bcd0ff,4,3,4"></div>
+
+<main class="wrap">
+  <!-- ===================== HERO ===================== -->
+  <header class="hero">
+    <div class="kicker">// {profile.kicker}</div>
+    <h1 class="name">{profile.name}</h1>
+    <div class="role">{profile.headline}<span class="caret"></span></div>
+    <div class="here">
+      <i data-sprite="flag" data-unit="3" data-color="#ef9fc0"></i>
+      {profile.location} · {profile.teamLeadNote}
+    </div>
+    <div class="contacts">
+      {heroContacts.map((c) => {
+        const s = CONTACT_SPRITES[c.id] ?? { sprite: 'gem', color: '#8aa3e8' };
+        const external = c.href.startsWith('http');
+        return (
+          <a
+            class="chip interactive"
+            href={c.href}
+            {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+          >
+            <i data-sprite={s.sprite} data-unit="2.4" data-color={s.color} {...(s.co ? { 'data-co': s.co } : {})}></i>
+            {c.label}
+          </a>
+        );
+      })}
+    </div>
+  </header>
+
+  <div class="cols">
+    <!-- ===== MAIN ===== -->
+    <div class="main">
+      <section>
+        <h2 class="sec-title"><i data-sprite="slime" data-unit="4" data-color="#8fd9bf" data-co="#3c3158"></i> About</h2>
+        <div class="panel pips summary">
+          {summary.map((para, i) => (
+            <p class={i === 0 ? 'lead' : undefined}>
+              {typeof para === 'string'
+                ? para
+                : para.map((seg) => (seg.strong ? <strong>{seg.text}</strong> : seg.text))}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <section style="margin-top:40px">
+        <h2 class="sec-title"><i data-sprite="flag" data-unit="4" data-color="#f3cf86"></i> The Ascent</h2>
+        <div class="ascent">
+          {experience.map((job, i) => {
+            const { range, duration } = splitDates(job.dates);
+            const cur = isCurrent(job);
+            const accent = ACCENTS[i] ?? EARLIER_ACCENT;
+            return (
+              <div class={`stop${cur ? ' cur' : ''}`} style={`--accent:${accent}`}>
+                <span class="way"></span>
+                <div class="panel pips card">
+                  <div class="j-head">
+                    <div>
+                      <div class="j-role">{job.position}{cur && <span class="cur-tag">NOW</span>}</div>
+                      <div class="j-co">
+                        {job.site ? (
+                          <a href={`https://${job.site}`} target="_blank" rel="noreferrer">{job.site}</a>
+                        ) : (
+                          job.company
+                        )}
+                        {job.project ? ` · ${job.project}` : ''}
+                      </div>
+                    </div>
+                    <div class="j-when">{range}<br /><b>{duration}</b></div>
+                  </div>
+                  {job.summary && <p class="proj">{job.summary}</p>}
+                  {job.items && (
+                    <ul class="bul">
+                      {job.items.map((item) => <li>{item}</li>)}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+
+          <div class="stop" style={`--accent:${EARLIER_ACCENT}`}>
+            <span class="way"></span>
+            <div class="panel pips earlier">
+              <i data-sprite="mushroom" data-unit="3.2" data-color="#cf9ad6" data-co="#fff6ef" data-cs="#f3cf86"></i>
+              <div><b>{earlierExperience.label} {earlierExperience.period}</b> {earlierExperience.text}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="side">
+      <div class="panel pips s-avatar">
+        <span class="avatar-frame">
+          <img src="/favicon.svg" alt={profile.name} width="120" height="120" />
+        </span>
+      </div>
+
+      <div class="panel pips s-card">
+        <h3><i data-sprite="gem" data-unit="3" data-color="#8aa3e8"></i> Skills</h3>
+        {skills.map((g) => (
+          <div class="grp">
+            <div class="lbl">{g.area}</div>
+            <div class="tags">
+              {g.items.map((it) => <span class="tag2">{it}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="panel pips s-card lang">
+        <h3><i data-sprite="heart" data-unit="2.6" data-color="#ef9fc0"></i> Languages</h3>
+        {languages.items.map((l, i) => {
+          const bar = LANG_BARS[i] ?? { width: '70%', color: '#8aa3e8' };
+          return (
+            <Fragment>
+              <div class="l"><span>{l.lang}</span><span class="v">{cleanLevel(l.level)}</span></div>
+              <div class="bar"><span style={`width:${bar.width}; --bar:${bar.color}`}></span></div>
+            </Fragment>
+          );
+        })}
+      </div>
+
+      <div class="panel pips s-card edu">
+        <h3><i data-sprite="flag" data-unit="2.6" data-color="#8fd9bf"></i> Education</h3>
+        <div class="deg">{education.company}</div>
+        <div class="sub">{education.description} · {education.dates}</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot no-print">
+    <a class="dl" href="javascript:window.print()"><i data-sprite="arrow" data-unit="3" data-color="#3c3158"></i> Save / Print PDF</a>
+    <div>The dusk climb · {profile.name}</div>
+  </div>
+</main>
+
+<script>
+  import './pixel.js';
+</script>

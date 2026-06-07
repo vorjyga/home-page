@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pavel Novaikin — Dusk Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/base.css" />
+<style>
+  :root {
+    --bg: #2d2440;
+    --panel: rgba(255, 250, 252, 0.92);
+    --ink: #3c3158;
+    --muted: #8d7fab;
+    --shadow: rgba(43, 30, 64, 0.30);
+    --chip: rgba(255,255,255,0.85);
+    --chip-hi: #fbeef6;
+    --peri:  #8aa3e8;
+    --pink:  #ef9fc0;
+    --coral: #f4a98f;
+    --mint:  #8fd9bf;
+    --gold:  #f3cf86;
+    --lilac: #b79ee6;
+    --cream: #fff6ef;
+  }
+
+  html, body { background: #2d2440; }
+
+  /* ---------- atmospheric dusk sky ---------- */
+  .sky {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    background:
+      linear-gradient(180deg,
+        #5b4a7e 0%,
+        #8f6e9e 26%,
+        #c98fa9 50%,
+        #f0b39a 70%,
+        #f6c9a6 88%,
+        #f7d6b0 100%);
+  }
+  .sky::before { /* soft sun glow */
+    content: ""; position: absolute; left: 50%; top: 30%;
+    width: 460px; height: 460px; transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(255,236,200,.85) 0, rgba(255,210,170,.35) 35%, transparent 65%);
+  }
+  /* pixel dither over sky */
+  .sky::after {
+    content: ""; position: absolute; inset: 0; opacity: .35;
+    background-image: radial-gradient(rgba(255,255,255,.5) 1px, transparent 1.5px);
+    background-size: 6px 6px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.7), transparent 55%);
+  }
+  .mtns { position: absolute; left: 0; right: 0; bottom: 0; height: 60vh; }
+  .mtn {
+    position: absolute; bottom: 0; left: -5%; right: -5%; width: 110%;
+  }
+  .mtn.m1 { height: 46vh; background:#6f5a8e; clip-path: polygon(0 100%, 0 60%, 9% 48%, 18% 60%, 27% 36%, 38% 56%, 50% 24%, 61% 52%, 72% 40%, 82% 58%, 92% 46%, 100% 62%, 100% 100%); opacity:.55; }
+  .mtn.m2 { height: 34vh; background:#5a4878; clip-path: polygon(0 100%, 0 70%, 12% 52%, 24% 70%, 36% 44%, 50% 66%, 64% 40%, 78% 64%, 90% 50%, 100% 70%, 100% 100%); opacity:.7; }
+  .mtn.m3 { height: 22vh; background:#43345f; clip-path: polygon(0 100%, 0 74%, 16% 58%, 33% 78%, 50% 56%, 67% 80%, 84% 60%, 100% 78%, 100% 100%); opacity:.85; }
+
+  /* ---------- layout ---------- */
+  .wrap {
+    position: relative; z-index: 1;
+    max-width: 1060px; margin: 0 auto; padding: 40px 22px 90px;
+  }
+
+  .hero { text-align: center; padding: 22px 18px 8px; }
+  .kicker {
+    font-family: "Silkscreen", monospace; font-size: 12px; letter-spacing: 4px;
+    text-transform: uppercase; color: #ffe9d4;
+    text-shadow: 2px 2px 0 rgba(43,30,64,.6);
+  }
+  .name {
+    margin-top: 16px;
+    font-family: "Press Start 2P", monospace;
+    font-size: clamp(22px, 5.2vw, 44px); line-height: 1.22;
+    color: #fff7f1;
+    text-shadow: 0 0 18px rgba(255,210,170,.65), 4px 4px 0 #5a4878;
+  }
+  .role {
+    margin-top: 18px; font-size: 22px; font-weight: 600; color: #fff2ea;
+    text-shadow: 2px 2px 0 rgba(43,30,64,.5);
+  }
+  .here {
+    margin-top: 10px; font-size: 16px; color: #ffe6d6;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .contacts { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; }
+  .contacts .chip { font-size: 14px; }
+
+  /* two columns */
+  .cols {
+    margin-top: 44px;
+    display: grid; grid-template-columns: 1fr 330px; gap: 26px; align-items: start;
+  }
+  .side { position: sticky; top: 18px; display: grid; gap: 18px; }
+
+  .panel { backdrop-filter: blur(2px); }
+
+  .sec-title {
+    display: inline-flex; align-items: center; gap: 11px; margin: 0 0 18px;
+    font-family: "Press Start 2P", monospace; font-size: 14px; color: #fff7f1;
+    text-shadow: 2px 2px 0 #5a4878;
+  }
+
+  /* summary */
+  .summary { padding: 22px 24px; font-size: 17.5px; }
+  .summary p { margin: 0 0 12px; }
+  .summary p:last-child { margin: 0; }
+  .summary .lead { font-size: 19px; color: #443a5e; }
+
+  /* ascent timeline */
+  .ascent { position: relative; margin-left: 8px; padding-left: 34px; }
+  .ascent::before {
+    content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 4px;
+    background-image: linear-gradient(#fff, #fff);
+    background-size: 4px 10px; background-repeat: repeat-y;
+    background: repeating-linear-gradient(#ffffffcc 0 6px, transparent 6px 12px);
+  }
+  .stop { position: relative; margin-bottom: 20px; }
+  .stop .way {
+    position: absolute; left: -34px; top: 6px;
+    width: 18px; height: 18px; border: 3px solid var(--ink);
+    background: var(--accent, #ef9fc0); border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(255,255,255,.5), 0 0 14px var(--accent, #ef9fc0);
+  }
+  .stop .card { padding: 16px 20px 18px; }
+  .stop.cur .way { animation: pulse 1.8s steps(4) infinite; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 4px rgba(255,255,255,.5), 0 0 10px var(--accent); }
+    50% { box-shadow: 0 0 0 6px rgba(255,255,255,.35), 0 0 22px var(--accent); }
+  }
+  .j-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 14px; align-items: baseline; }
+  .j-role { font-size: 19px; font-weight: 700; color: var(--ink); }
+  .j-co { font-size: 15px; color: #6c5d88; margin-top: 2px; }
+  .j-co a { color: #6c5d88; }
+  .j-when { font-family: "Silkscreen", monospace; font-size: 11px; color: #8678a3; white-space: nowrap; }
+  .j-when b { color: var(--ink); }
+  .proj { margin: 10px 0 8px; font-size: 14px; color:#6c5d88; }
+  ul.bul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+  ul.bul li { position: relative; padding-left: 20px; font-size: 15.5px; color: #4d4168; }
+  ul.bul li::before {
+    content: ""; position: absolute; left: 1px; top: 7px; width: 8px; height: 8px;
+    background: var(--accent, #ef9fc0); border: 2px solid var(--ink);
+  }
+  .cur-tag {
+    display: inline-block; font-family: "Silkscreen", monospace; font-size: 9px;
+    letter-spacing: 1px; background: var(--mint); border: 2px solid var(--ink);
+    padding: 2px 6px; border-radius: 2px; margin-left: 8px; vertical-align: 2px;
+  }
+  .earlier { padding: 14px 18px; font-size: 15px; color: #4d4168; display:flex; gap:11px; align-items:flex-start; }
+
+  /* sidebar pieces */
+  .s-avatar { padding: 16px; text-align: center; }
+  .avatar-frame {
+    display: inline-block; padding: 6px; border: 3px solid var(--ink); border-radius: 3px;
+    background: repeating-linear-gradient(45deg, #efe2f3 0 8px, #e6d4ee 8px 16px);
+  }
+  .s-card { padding: 16px 18px; }
+  .s-card h3 {
+    font-family: "Silkscreen", monospace; font-size: 12px; letter-spacing: 1px;
+    color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .grp { margin-bottom: 12px; }
+  .grp:last-child { margin-bottom: 0; }
+  .grp .lbl { font-size: 12px; color: #8678a3; font-family: "Silkscreen", monospace; letter-spacing: .5px; margin-bottom: 6px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag2 {
+    font-size: 13px; padding: 3px 8px; border: 2px solid var(--ink); border-radius: 2px;
+    background: rgba(255,255,255,.7); box-shadow: 2px 2px 0 0 var(--shadow);
+  }
+  .lang .l { display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; margin-bottom: 5px; }
+  .lang .l .v { font-family: "Silkscreen", monospace; font-size: 11px; color:#8678a3; font-weight:400; }
+  .lang .bar { margin-bottom: 12px; }
+  .edu .deg { font-size: 15.5px; font-weight: 700; color: var(--ink); }
+  .edu .sub { font-size: 13.5px; color: #6c5d88; margin-top: 4px; }
+
+  .foot { margin-top: 40px; text-align:center; color:#ffe6d6; font-size:14px; display:flex; flex-direction:column; align-items:center; gap:12px; }
+  .dl {
+    display: inline-flex; align-items: center; gap: 9px; background: var(--mint);
+    border: 3px solid var(--ink); border-radius: 2px; padding: 10px 18px;
+    font-family: "Silkscreen", monospace; font-size: 12px; letter-spacing: 1px;
+    color: var(--ink); text-decoration: none; box-shadow: 4px 4px 0 0 rgba(43,30,64,.4); cursor: pointer;
+  }
+  .dl:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 rgba(43,30,64,.4); }
+  .dl:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 0 rgba(43,30,64,.4); }
+
+  @media (max-width: 860px) {
+    .cols { grid-template-columns: 1fr; }
+    .side { position: static; order: -1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky">
+  <div class="mtns">
+    <div class="mtn m1"></div>
+    <div class="mtn m2"></div>
+    <div class="mtn m3"></div>
+  </div>
+</div>
+<div class="sky" data-pixel-field="sparkle,#fff3da,10,3,4; star4,#ffe1b0,5,3,5; gem,#bcd0ff,4,3,4"></div>
+
+<main class="wrap">
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero" data-screen-label="Hero">
+    <div class="kicker">// Front End · Senior / Lead</div>
+    <h1 class="name">Pavel&nbsp;Novaikin</h1>
+    <div class="role">Building reliable web products for 10 years<span class="caret"></span></div>
+    <div class="here"><i data-sprite="flag" data-unit="3" data-color="#ef9fc0"></i> Tbilisi, Georgia · 3 yrs as Team Lead</div>
+    <div class="contacts">
+      <a class="chip interactive" href="mailto:novaikin@gmail.com"><i data-sprite="heart" data-unit="2.4" data-color="#ef9fc0"></i> novaikin@gmail.com</a>
+      <a class="chip interactive" href="https://novaikin.com" target="_blank" rel="noreferrer"><i data-sprite="gem" data-unit="2.4" data-color="#8aa3e8"></i> novaikin.com</a>
+      <a class="chip interactive" href="https://github.com/vorjyga" target="_blank" rel="noreferrer"><i data-sprite="coin" data-unit="2.4" data-color="#f3cf86" data-co="#fff6ef"></i> github.com/vorjyga</a>
+      <a class="chip interactive" href="https://linkedin.com/in/novaikin" target="_blank" rel="noreferrer"><i data-sprite="gem" data-unit="2.4" data-color="#8fd9bf"></i> linkedin.com/in/novaikin</a>
+      <a class="chip interactive" href="https://t.me/Pavel_Novaikin" target="_blank" rel="noreferrer"><i data-sprite="sparkle" data-unit="2.4" data-color="#b79ee6"></i> t.me/Pavel_Novaikin</a>
+    </div>
+  </header>
+
+  <div class="cols">
+
+    <!-- ===== MAIN ===== -->
+    <div class="main">
+
+      <section>
+        <h2 class="sec-title"><i data-sprite="slime" data-unit="4" data-color="#8fd9bf" data-co="#3c3158"></i> About</h2>
+        <div class="panel pips summary">
+          <p class="lead">I turn messy, complex requirements into clean, reliable products that genuinely help both users and the business.</p>
+          <p>Over the past decade I've shipped products across fintech, crypto, media, and large-scale sports platforms — from real-time trading systems to a high-traffic news platform. Different domains taught me to get up to speed fast, pick the right approach, and stay independent of any single tool or framework.</p>
+          <p>I've scaled apps serving tens of thousands of daily users, set up greenfield projects end to end, and grown teams through code review, mentoring, and technical hiring — working closely with backend, DevOps, and product.</p>
+        </div>
+      </section>
+
+      <section style="margin-top:40px">
+        <h2 class="sec-title"><i data-sprite="flag" data-unit="4" data-color="#f3cf86"></i> The Ascent</h2>
+        <div class="ascent">
+
+          <div class="stop cur" style="--accent:#ef9fc0">
+            <span class="way"></span>
+            <div class="panel pips card">
+              <div class="j-head">
+                <div>
+                  <div class="j-role">Front End Team Lead <span class="cur-tag">NOW</span></div>
+                  <div class="j-co">News Company (Under NDA) · “The Times” in crypto</div>
+                </div>
+                <div class="j-when">Nov 2025 — Present<br /><b>7 months</b></div>
+              </div>
+              <ul class="bul">
+                <li>Shipped &amp; maintained 3 production apps serving <b>30k daily active users</b>; led a full major framework upgrade and stood up greenfield projects (ESLint, Prettier, Husky, Sentry, i18n, GTM, Grafana).</li>
+                <li>Owned engineering standards — reviews, a GitHub workflow with LLM-assisted self-review, automated CI quality gates, dependency upgrades.</li>
+                <li>Led a team of 3 — feature decomposition, tech-debt tracking in Jira, transparent estimation, technical interviews.</li>
+                <li>Drove cross-functional work with DevOps, backend, Product and the CTO.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stop" style="--accent:#f4a98f">
+            <span class="way"></span>
+            <div class="panel pips card">
+              <div class="j-head">
+                <div>
+                  <div class="j-role">Senior Front End Developer</div>
+                  <div class="j-co">News Company (Under NDA) · “The Times” in crypto</div>
+                </div>
+                <div class="j-when">Jun 2023 — Nov 2025<br /><b>2 yrs 5 mos</b></div>
+              </div>
+              <ul class="bul">
+                <li>Delivered key sections of the main website, improving structure and UX consistency.</li>
+                <li>Contributed to a smooth, backward-compatible major framework migration.</li>
+                <li>Optimized data create/process/store/present flow — <b>cut load times 20%</b>.</li>
+                <li>Integrated 5 third-party APIs and 20+ partner widgets; led the team during the lead's absence.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stop" style="--accent:#f3cf86">
+            <span class="way"></span>
+            <div class="panel pips card">
+              <div class="j-head">
+                <div>
+                  <div class="j-role">Senior Front End Developer</div>
+                  <div class="j-co"><a href="https://cryptopay.me" target="_blank" rel="noreferrer">cryptopay.me</a></div>
+                </div>
+                <div class="j-when">Apr 2022 — Jun 2023<br /><b>1 yr 3 mos</b></div>
+              </div>
+              <ul class="bul">
+                <li>Built &amp; refined the core user dashboard used by ~20,000 customers.</li>
+                <li>Created a new SPA presentation site — 5 core + 12 nested pages.</li>
+                <li>Built a standalone company blog with Strapi as a headless CMS.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stop" style="--accent:#8fd9bf">
+            <span class="way"></span>
+            <div class="panel pips card">
+              <div class="j-head">
+                <div>
+                  <div class="j-role">Fullstack Developer</div>
+                  <div class="j-co">Introduct tech</div>
+                </div>
+                <div class="j-when">Feb 2021 — Apr 2022<br /><b>1 yr 3 mos</b></div>
+              </div>
+              <ul class="bul">
+                <li>Developed 2 mobile apps (Android &amp; iOS) with NativeScript + Angular.</li>
+                <li>Built a help-desk front&nbsp;end and an isomorphic Nuxt.js web app from scratch.</li>
+                <li>Implemented Keycloak.js-based authorization.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stop" style="--accent:#8aa3e8">
+            <span class="way"></span>
+            <div class="panel pips card">
+              <div class="j-head">
+                <div>
+                  <div class="j-role">Front End Team Lead</div>
+                  <div class="j-co"><a href="https://www.aaatrade.com" target="_blank" rel="noreferrer">aaatrade.com</a> · FinTech</div>
+                </div>
+                <div class="j-when">Jan 2019 — Apr 2021<br /><b>2 yrs 4 mos</b></div>
+              </div>
+              <ul class="bul">
+                <li>Led a front&nbsp;end team of 6 — scrums, mentoring, interviewing, task supervision.</li>
+                <li>Owned tech stack &amp; quality; introduced code review and incident management.</li>
+                <li>Migrated JS → TypeScript; refactored toward SOLID; reduced client CPU load.</li>
+                <li>Designed a middleware API and automated deploys (Bamboo).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stop" style="--accent:#b79ee6">
+            <span class="way"></span>
+            <div class="panel pips card">
+              <div class="j-head">
+                <div>
+                  <div class="j-role">Front End Developer</div>
+                  <div class="j-co"><a href="https://strictlogic.com" target="_blank" rel="noreferrer">strictlogic.com</a> · Sports portal / CRM</div>
+                </div>
+                <div class="j-when">Jan 2018 — Jan 2019<br /><b>1 yr 1 mo</b></div>
+              </div>
+              <ul class="bul">
+                <li>Built my front&nbsp;end module for a large, scalable system for a world sports association.</li>
+                <li>Stable WebSocket connection to middleware for real-time data.</li>
+                <li>Built an email-service front&nbsp;end; gathered requirements directly with clients in Germany.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stop" style="--accent:#f4a98f">
+            <span class="way"></span>
+            <div class="panel pips card">
+              <div class="j-head">
+                <div>
+                  <div class="j-role">Front End Developer</div>
+                  <div class="j-co"><a href="https://arview.pro" target="_blank" rel="noreferrer">arview.pro</a> · Travel service</div>
+                </div>
+                <div class="j-when">Jun 2017 — Jan 2018<br /><b>8 months</b></div>
+              </div>
+              <ul class="bul">
+                <li>Crafted the service front&nbsp;end from pixel-perfect designs.</li>
+                <li>Authored many custom Angular components; tested every feature at sprint's end.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="stop" style="--accent:#c7b59a">
+            <span class="way"></span>
+            <div class="panel pips earlier">
+              <i data-sprite="mushroom" data-unit="3.2" data-color="#cf9ad6" data-co="#fff6ef" data-cS="#f3cf86"></i>
+              <div><b>Earlier (2008–2016)</b> — Web Developer at Paraweb; System Administrator at TUSUR.</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="side">
+      <div class="panel pips s-avatar">
+        <span class="avatar-frame">
+          <image-slot id="dusk-avatar" style="width:120px;height:120px" shape="rect" placeholder="drop pixel avatar"></image-slot>
+        </span>
+      </div>
+
+      <div class="panel pips s-card">
+        <h3><i data-sprite="gem" data-unit="3" data-color="#8aa3e8"></i> Skills</h3>
+        <div class="grp"><div class="lbl">Languages</div><div class="tags"><span class="tag2">TypeScript</span><span class="tag2">JavaScript</span><span class="tag2">Python</span></div></div>
+        <div class="grp"><div class="lbl">Front End</div><div class="tags"><span class="tag2">React</span><span class="tag2">Vue</span><span class="tag2">Nuxt</span><span class="tag2">Next</span><span class="tag2">Angular</span></div></div>
+        <div class="grp"><div class="lbl">State</div><div class="tags"><span class="tag2">Pinia</span><span class="tag2">Vuex</span><span class="tag2">Redux</span><span class="tag2">Zustand</span><span class="tag2">MobX</span></div></div>
+        <div class="grp"><div class="lbl">Styling</div><div class="tags"><span class="tag2">Tailwind</span><span class="tag2">SCSS</span><span class="tag2">Bootstrap</span><span class="tag2">Reka UI</span><span class="tag2">Radix</span></div></div>
+        <div class="grp"><div class="lbl">Backend · API</div><div class="tags"><span class="tag2">Node</span><span class="tag2">Nest</span><span class="tag2">Bun</span><span class="tag2">FastAPI</span><span class="tag2">GraphQL</span><span class="tag2">REST</span></div></div>
+        <div class="grp"><div class="lbl">Mobile</div><div class="tags"><span class="tag2">Expo</span><span class="tag2">Ionic</span><span class="tag2">Capacitor</span><span class="tag2">Electron</span></div></div>
+        <div class="grp"><div class="lbl">CMS · Auth · BaaS</div><div class="tags"><span class="tag2">Payload</span><span class="tag2">Strapi</span><span class="tag2">Keycloak</span><span class="tag2">Supabase</span><span class="tag2">Firebase</span></div></div>
+        <div class="grp"><div class="lbl">Testing</div><div class="tags"><span class="tag2">Vitest</span><span class="tag2">Jest</span><span class="tag2">Playwright</span><span class="tag2">Cypress</span></div></div>
+        <div class="grp"><div class="lbl">Build · DevOps</div><div class="tags"><span class="tag2">Vite</span><span class="tag2">Webpack</span><span class="tag2">Gitlab CI</span><span class="tag2">Sentry</span><span class="tag2">Lighthouse</span></div></div>
+        <div class="grp"><div class="lbl">Architecture</div><div class="tags"><span class="tag2">Feature-Sliced</span><span class="tag2">RxJS</span></div></div>
+      </div>
+
+      <div class="panel pips s-card lang">
+        <h3><i data-sprite="heart" data-unit="2.6" data-color="#ef9fc0"></i> Languages</h3>
+        <div class="l"><span>Russian</span><span class="v">NATIVE</span></div>
+        <div class="bar"><span style="width:100%; --bar:#ef9fc0"></span></div>
+        <div class="l"><span>English</span><span class="v">C1 · ADVANCED</span></div>
+        <div class="bar"><span style="width:85%; --bar:#8aa3e8"></span></div>
+      </div>
+
+      <div class="panel pips s-card edu">
+        <h3><i data-sprite="flag" data-unit="2.6" data-color="#8fd9bf"></i> Education</h3>
+        <div class="deg">TUSUR — Tomsk State University of Control Systems &amp; Radioelectronics</div>
+        <div class="sub">Management Systems · Data Processing &amp; Information · 2018 · Bachelor</div>
+      </div>
+    </aside>
+
+  </div>
+
+  <div class="foot no-print">
+    <a class="dl" href="javascript:window.print()"><i data-sprite="arrow" data-unit="3" data-color="#3c3158"></i> Save / Print PDF</a>
+    <div>The dusk climb · Pavel Novaikin</div>
+  </div>
+
+</main>
+
+<script src="assets/image-slot.js"></script>
+<script src="assets/pixel.js"></script>
+</body>
+</html>

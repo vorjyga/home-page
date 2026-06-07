@@ -1,0 +1,370 @@
+---
+import { profile, contacts, skills, education, languages } from '../../data/index.js';
+import './styles/editorial.css';
+
+// Build toolkit groups from skills data, mirroring the design labels
+const toolkitGroups = [
+  { label: 'languages',           items: skills.find(s => s.area === 'Programming Languages')?.items ?? [] },
+  { label: 'front end',           items: skills.find(s => s.area === 'Front End')?.items ?? [] },
+  { label: 'state management',    items: skills.find(s => s.area === 'State Management')?.items ?? [] },
+  { label: 'styling',             items: skills.find(s => s.area === 'Styling')?.items ?? [] },
+  { label: 'backend & apis',      items: [...(skills.find(s => s.area === 'Backend')?.items ?? []), ...(skills.find(s => s.area === 'APIs')?.items ?? [])] },
+  { label: 'mobile',              items: skills.find(s => s.area === 'Mobile Apps')?.items ?? [] },
+  { label: 'cms · auth · baas',   items: [...(skills.find(s => s.area === 'CMS')?.items ?? []), ...(skills.find(s => s.area === 'Auth & BaaS')?.items ?? [])] },
+  { label: 'testing',             items: skills.find(s => s.area === 'Testing')?.items ?? [] },
+  { label: 'build · devops',      items: [...(skills.find(s => s.area === 'Build Tools')?.items ?? []), ...(skills.find(s => s.area === 'DevOps & Monitoring')?.items ?? [])] },
+  { label: 'architecture',        items: skills.find(s => s.area === 'Architecture')?.items ?? [] },
+];
+
+const allSkills = skills.flatMap(s => s.items);
+
+// Curated experience content, matching the editorial design exactly.
+// (The raw data carries longer copy and stores the project line under different
+// fields, so the design uses this condensed, presentation-ready version.)
+const roles = [
+  {
+    when: 'Nov 2025 — Present', dur: '7 months',
+    title: 'Front-End Team Lead', co: 'News Company', nda: '(NDA)', now: true,
+    proj: '“The Times” in the crypto industry — a high-traffic news platform.',
+    bullets: [
+      'Shipped &amp; maintained <b>3 production apps serving 30K daily active users</b>; led a full major-version framework upgrade and stood up greenfield projects end to end (ESLint, Prettier, Husky, Sentry, i18n, GTM, Grafana monitoring).',
+      'Owned engineering standards &amp; code quality — conventions, thorough reviews, a GitHub workflow with LLM-assisted self-review, automated CI quality gates, dependency upgrades.',
+      'Led a team of 3 front-end engineers — feature decomposition, tech-debt tracking in Jira, transparent estimation, technical interviews.',
+      'Drove cross-functional work with DevOps, backend, Product and the CTO.',
+    ],
+    tags: ['Team Leadership', 'System Design', 'CI/CD', 'Sentry', 'Grafana', 'i18n'],
+  },
+  {
+    when: 'Jun 2023 — Nov 2025', dur: '2 yrs 5 mos',
+    title: 'Senior Front-End Developer', co: 'News Company', nda: '(NDA)',
+    proj: '“The Times” in the crypto industry.',
+    bullets: [
+      'Delivered several key sections of the main website, improving structure and UX consistency.',
+      'Contributed to a smooth, backward-compatible major framework migration.',
+      'Optimized how data is created, processed, stored &amp; presented — <b>cut load times 20%</b>.',
+      'Integrated 5 third-party APIs and 20+ partner widgets; stepped up to lead the team during the lead\'s absence.',
+    ],
+    tags: ['Vue / Nuxt', 'Performance', 'API Integration', 'UX'],
+  },
+  {
+    when: 'Apr 2022 — Jun 2023', dur: '1 yr 3 mos',
+    title: 'Senior Front-End Developer', co: 'Cryptopay.me',
+    bullets: [
+      'Built &amp; refined the core user dashboard used by <b>~20,000 customers</b>.',
+      'Created a new SPA presentation site — 5 core + 12 nested pages.',
+      'Built a standalone company blog with Strapi as a headless CMS.',
+    ],
+    tags: ['SPA', 'Strapi', 'Dashboard'],
+  },
+  {
+    when: 'Feb 2021 — Apr 2022', dur: '1 yr 3 mos',
+    title: 'Fullstack Developer', co: 'Introduct tech',
+    bullets: [
+      'Developed 2 mobile apps (Android &amp; iOS) with NativeScript + Angular.',
+      'Built a help-desk front-end and an isomorphic Nuxt.js web app from scratch.',
+      'Implemented Keycloak.js-based authorization.',
+    ],
+    tags: ['NativeScript', 'Angular', 'Nuxt.js', 'Keycloak'],
+  },
+  {
+    when: 'Jan 2019 — Apr 2021', dur: '2 yrs 4 mos', loc: '· FinTech',
+    title: 'Front-End Team Lead', co: 'AAATrade',
+    bullets: [
+      'Led a front-end team of <b>6</b> — scrums, mentoring, interviewing, task supervision.',
+      'Owned tech stack &amp; quality; introduced code review and incident management.',
+      'Migrated the project <b>JS → TypeScript</b>; refactored toward SOLID; reduced client CPU load.',
+      'Designed a middleware API and automated deploys (Bamboo).',
+    ],
+    tags: ['Team Leadership', 'TypeScript', 'SOLID', 'Middleware'],
+  },
+  {
+    when: 'Jan 2018 — Jan 2019', dur: '1 yr 1 mo', loc: '· Sports portal / CRM',
+    title: 'Front-End Developer', co: 'Strict Logic',
+    bullets: [
+      'Built my front-end module for a large, scalable system for a world sports association.',
+      'Stable <b>WebSocket</b> connection to middleware for real-time data.',
+      'Built an email-service front-end; gathered requirements directly with clients in Germany.',
+    ],
+    tags: ['WebSocket', 'Real-time', 'Large-scale'],
+  },
+  {
+    when: 'Jun 2017 — Jan 2018', dur: '8 months', loc: '· Travel service',
+    title: 'Front-End Developer', co: 'Arview',
+    bullets: [
+      'Crafted the service front-end from pixel-perfect designs.',
+      'Authored many custom Angular components; tested every feature at sprint\'s end.',
+    ],
+    tags: ['Angular', 'Pixel-perfect'],
+  },
+];
+
+const earlier = {
+  period: '2008 — 2016',
+  text: 'Web Developer at Paraweb, and System Administrator at TUSUR (Tomsk State University of Control Systems &amp; Radioelectronics).',
+};
+---
+
+<div class="ed-root">
+
+  <!-- top bar -->
+  <div class="ed-topbar no-print">
+    <button class="ed-tbtn" id="ed-theme-toggle" type="button" aria-label="Toggle theme">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path>
+      </svg>
+      <span id="ed-theme-label">Dark</span>
+    </button>
+    <a class="ed-tbtn" href="javascript:window.print()">Download CV</a>
+  </div>
+
+  <main class="ed-page">
+
+    <!-- ===================== HERO ===================== -->
+    <header class="ed-hero">
+      <span class="ed-badge">
+        <span class="ed-dot"></span>
+        Open to work · Remote-friendly · {profile.location}
+      </span>
+
+      <h1 class="ed-name">Pavel<br />Novaikin<span class="reddot">.</span></h1>
+
+      <div class="ed-eyebrow ed-role-eyebrow">{profile.title}</div>
+
+      <p class="ed-tagline">
+        Ten years turning messy, complex requirements into<br />
+        <span class="em">clean, reliable products</span> — and three years leading the team that ships them.
+      </p>
+
+      <div class="ed-summary">
+        <b>10 yrs</b> front-end · <b>3 yrs</b> as team lead · <b>30K</b> daily active users ·
+        fintech · crypto · media · large-scale sports ·
+        <b>React</b> · <b>Vue / Nuxt</b> · <b>TypeScript</b> ·
+        greenfield setup · code review &amp; mentoring · performance
+      </div>
+
+      <div class="ed-cta-row">
+        <a class="ed-btn primary" href="javascript:window.print()">Download CV (PDF)</a>
+        <a class="ed-btn ghost" href={contacts.find(c => c.id === 'email')?.href}>
+          {contacts.find(c => c.id === 'email')?.label}
+        </a>
+      </div>
+
+      <nav class="ed-links">
+        {contacts.filter(c => c.id !== 'email').map(c => (
+          <a href={c.href} target="_blank" rel="noreferrer">{
+            c.id === 'github'   ? 'GitHub'   :
+            c.id === 'telegram' ? 'Telegram' :
+            c.id === 'linkedin' ? 'LinkedIn' :
+            c.label
+          }</a>
+        ))}
+      </nav>
+
+      <div class="ed-opento">
+        <div class="ed-eyebrow">Open to</div>
+        <div class="roles">
+          Front-End Lead <span class="sep">·</span>
+          Tech Lead <span class="sep">·</span>
+          Senior Front-End <span class="sep">·</span>
+          Front-End Architect <span class="sep">·</span>
+          Engineering Lead
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== STATS ===================== -->
+    <div class="ed-stats">
+      <div class="ed-stat">
+        <div class="num">10<span class="u">+</span></div>
+        <div class="cap">years shipping<br />production front-ends</div>
+      </div>
+      <div class="ed-stat">
+        <div class="num">6</div>
+        <div class="cap">engineers in the<br />largest team I led</div>
+      </div>
+      <div class="ed-stat">
+        <div class="num">30<span class="u">K</span></div>
+        <div class="cap">daily active users<br />served &amp; scaled</div>
+      </div>
+      <div class="ed-stat">
+        <div class="num">20<span class="u">%</span></div>
+        <div class="cap">faster load times<br />after optimization</div>
+      </div>
+    </div>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section class="ed-section">
+      <div class="ed-sec-head">
+        <h2>About</h2>
+        <span class="ed-kicker">// profile</span>
+      </div>
+
+      <p class="ed-lead">
+        Front-end developer turned team lead — 10 years building, scaling and owning web
+        applications, the last three with lead responsibilities behind them.
+      </p>
+
+      <p class="ed-body-p">
+        Over the past decade I've shipped products across
+        <span class="hi">fintech, crypto, media, and large-scale sports platforms</span>
+        — from real-time trading systems to a high-traffic news platform. Moving between such
+        different domains taught me to get up to speed fast, pick the right approach for each
+        problem, and stay independent of any single tool or framework.
+      </p>
+
+      <p class="ed-body-p">
+        I've delivered and scaled apps serving tens of thousands of daily users, set up
+        greenfield projects end to end, and grown teams through code review, mentoring, and
+        technical hiring — working closely with backend, DevOps, and product. I also bring UI
+        design sense, testing with Mocha &amp; Jest, and hands-on browser debugging &amp;
+        performance work.
+      </p>
+
+      <div class="ed-eyebrow ed-proof-label">Proof points</div>
+      <div class="ed-proof">
+        <div class="ed-pp"><span class="pin"></span><span>Shipped &amp; maintained <b>3 production apps</b> serving 30K daily active users at a crypto news platform.</span></div>
+        <div class="ed-pp"><span class="pin"></span><span>Led a full <b>major-version framework upgrade</b> and stood up greenfield projects end to end.</span></div>
+        <div class="ed-pp"><span class="pin"></span><span>Optimized data flow to <b>cut load times by 20%</b> across the main product.</span></div>
+        <div class="ed-pp"><span class="pin"></span><span>Migrated a FinTech codebase <b>JavaScript → TypeScript</b> and refactored it toward SOLID.</span></div>
+      </div>
+
+      <div class="ed-stackline">
+        <span class="k">core stack</span>&nbsp;
+        <span class="v">TypeScript · React · Vue · Nuxt · Next · Angular · Node / Nest · GraphQL · Tailwind / SCSS · Vite · Feature-Sliced Design</span>
+      </div>
+    </section>
+
+    <!-- ===================== EXPERIENCE ===================== -->
+    <section class="ed-section">
+      <div class="ed-sec-head">
+        <h2>Experience</h2>
+        <span class="ed-kicker">2017 — now</span>
+      </div>
+
+      <div class="ed-xp">
+        {roles.map((job, i) => (
+          <article class={`ed-job${job.now ? ' is-now' : ''}`}>
+            <div class="idx">{String(i + 1).padStart(2, '0')}</div>
+            <div class="when">
+              <span>{job.when}</span>
+              <span class="dur">{job.dur}</span>
+              {job.loc && <span class="loc">{job.loc}</span>}
+            </div>
+            <div class="ttl">
+              {job.title} <span class="at">at</span> <span class="co">{job.co}</span>
+              {job.nda && <span class="at"> {job.nda}</span>}
+              {job.now && <span class="now-pill">NOW</span>}
+            </div>
+            {job.proj && <div class="proj">{job.proj}</div>}
+            <ul>
+              {job.bullets.map(item => <li set:html={item} />)}
+            </ul>
+            <div class="tags">
+              {job.tags.map(t => <span class="ed-tag">{t}</span>)}
+            </div>
+          </article>
+        ))}
+
+        <article class="ed-job is-earlier">
+          <div class="idx">08</div>
+          <div class="earlier-txt" set:html={`<b>Earlier · ${earlier.period}</b>&nbsp;${earlier.text}`} />
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== TOOLKIT ===================== -->
+    <section class="ed-section">
+      <div class="ed-sec-head">
+        <h2>Toolkit</h2>
+        <span class="ed-kicker">{toolkitGroups.length} groups</span>
+      </div>
+
+      <div class="ed-kit">
+        {toolkitGroups.map(group => (
+          <div class="ed-kcard">
+            <div class="glabel">{group.label}</div>
+            <div class="tiles">
+              {group.items.map(item => <span class="ed-tile">{item}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="ed-kcard ed-allskills">
+        <div class="glabel">everything · all skills</div>
+        <div class="tiles">
+          {allSkills.map(item => <span class="ed-tile">{item}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EDUCATION & LANGUAGES ===================== -->
+    <section class="ed-section">
+      <div class="ed-sec-head">
+        <h2>Education &amp; languages</h2>
+        <span class="ed-kicker">// credentials</span>
+      </div>
+      <div class="ed-duo">
+        <div class="ed-card ed-edu">
+          <h3>Education</h3>
+          <div class="deg">{education.company}</div>
+          <div class="sub">{education.description}</div>
+          <div class="yr">{education.dates}</div>
+        </div>
+        <div class="ed-card ed-lang">
+          <h3>Languages</h3>
+          {languages.items.map(({ lang, level }) => {
+            const pct = lang === 'Russian' ? '100%' : '85%';
+            const label = lang === 'Russian' ? 'NATIVE' : 'C1 · ADVANCED';
+            return (
+              <div class="lang-row">
+                <div class="lr">
+                  <span class="n">{lang}</span>
+                  <span class="v">{label}</span>
+                </div>
+                <div class="ed-meter"><span style={`width:${pct}`}></span></div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <footer class="ed-contact">
+      <h2>Let's build something<br />reliable<span class="reddot">.</span></h2>
+      <p class="sub">
+        Reach me at <a href={contacts.find(c => c.id === 'email')?.href}>{contacts.find(c => c.id === 'email')?.label}</a>
+        or <a href={contacts.find(c => c.id === 'telegram')?.href} target="_blank" rel="noreferrer">@Pavel_Novaikin</a> on Telegram.
+      </p>
+      <div class="ed-colophon">
+        <span>{profile.name} · {profile.title} · {profile.location}</span>
+        <span>Set in Archivo &amp; JetBrains Mono</span>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  (function () {
+    const root = document.documentElement;
+    const label = document.getElementById('ed-theme-label');
+    let saved = null;
+    try { saved = localStorage.getItem('cv-theme'); } catch (_) {}
+    if (saved) root.setAttribute('data-theme', saved);
+    function sync() {
+      const dark = root.getAttribute('data-theme') === 'dark';
+      if (label) label.textContent = dark ? 'Light' : 'Dark';
+    }
+    sync();
+    const btn = document.getElementById('ed-theme-toggle');
+    if (btn) btn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('cv-theme', next); } catch (_) {}
+      sync();
+    });
+  })();
+</script>

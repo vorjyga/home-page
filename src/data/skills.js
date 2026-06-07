@@ -1,0 +1,15 @@
+export const skills = [
+    { area: 'Programming Languages', items: ['TypeScript', 'JavaScript', 'Python'] },
+    { area: 'Front End', items: ['React', 'Vue', 'Nuxt.js', 'Next.js', 'Angular'] },
+    { area: 'State Management', items: ['Pinia', 'Vuex', 'Redux', 'Zustand', 'MobX'] },
+    { area: 'Styling', items: ['Tailwind', 'SCSS', 'Bootstrap', 'Reka UI', 'Radix UI'] },
+    { area: 'Backend', items: ['Node.js', 'Nest.js', 'Bun', 'FastAPI'] },
+    { area: 'Mobile Apps', items: ['Expo', 'Ionic', 'Capacitor', 'Electron'] },
+    { area: 'APIs', items: ['GraphQL', 'REST'] },
+    { area: 'CMS', items: ['Payload.js', 'Strapi'] },
+    { area: 'Auth & BaaS', items: ['Keycloak', 'Supabase', 'Firebase'] },
+    { area: 'Testing', items: ['Vitest', 'Jest', 'Playwright', 'Cypress'] },
+    { area: 'Build Tools', items: ['Vite', 'Webpack'] },
+    { area: 'DevOps & Monitoring', items: ['Gitlab CI', 'Sentry', 'Google Lighthouse'] },
+    { area: 'Architecture', items: ['Feature-Sliced Design', 'RxJS'] },
+]

@@ -1,0 +1,184 @@
+/* dusk.css — page theme + layout for the pixel résumé (ported from the design mockup) */
+:root {
+    --bg: #2d2440;
+    --panel: rgba(255, 250, 252, 0.92);
+    --ink: #3c3158;
+    --muted: #8d7fab;
+    --shadow: rgba(43, 30, 64, 0.30);
+    --chip: rgba(255,255,255,0.85);
+    --chip-hi: #fbeef6;
+    --peri:  #8aa3e8;
+    --pink:  #ef9fc0;
+    --coral: #f4a98f;
+    --mint:  #8fd9bf;
+    --gold:  #f3cf86;
+    --lilac: #b79ee6;
+    --cream: #fff6ef;
+}
+
+html, body { background: #2d2440; }
+
+/* ---------- atmospheric dusk sky ---------- */
+.sky {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    background:
+        linear-gradient(180deg,
+            #5b4a7e 0%,
+            #8f6e9e 26%,
+            #c98fa9 50%,
+            #f0b39a 70%,
+            #f6c9a6 88%,
+            #f7d6b0 100%);
+}
+.sky::before { /* soft sun glow */
+    content: ""; position: absolute; left: 50%; top: 30%;
+    width: 460px; height: 460px; transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(255,236,200,.85) 0, rgba(255,210,170,.35) 35%, transparent 65%);
+}
+/* pixel dither over sky */
+.sky::after {
+    content: ""; position: absolute; inset: 0; opacity: .35;
+    background-image: radial-gradient(rgba(255,255,255,.5) 1px, transparent 1.5px);
+    background-size: 6px 6px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.7), transparent 55%);
+}
+.mtns { position: absolute; left: 0; right: 0; bottom: 0; height: 60vh; }
+.mtn {
+    position: absolute; bottom: 0; left: -5%; right: -5%; width: 110%;
+}
+.mtn.m1 { height: 46vh; background:#6f5a8e; clip-path: polygon(0 100%, 0 60%, 9% 48%, 18% 60%, 27% 36%, 38% 56%, 50% 24%, 61% 52%, 72% 40%, 82% 58%, 92% 46%, 100% 62%, 100% 100%); opacity:.55; }
+.mtn.m2 { height: 34vh; background:#5a4878; clip-path: polygon(0 100%, 0 70%, 12% 52%, 24% 70%, 36% 44%, 50% 66%, 64% 40%, 78% 64%, 90% 50%, 100% 70%, 100% 100%); opacity:.7; }
+.mtn.m3 { height: 22vh; background:#43345f; clip-path: polygon(0 100%, 0 74%, 16% 58%, 33% 78%, 50% 56%, 67% 80%, 84% 60%, 100% 78%, 100% 100%); opacity:.85; }
+
+/* ---------- layout ---------- */
+.wrap {
+    position: relative; z-index: 1;
+    max-width: 1060px; margin: 0 auto; padding: 40px 22px 90px;
+}
+
+.hero { text-align: center; padding: 22px 18px 8px; }
+.kicker {
+    font-family: "Silkscreen", monospace; font-size: 12px; letter-spacing: 4px;
+    text-transform: uppercase; color: #ffe9d4;
+    text-shadow: 2px 2px 0 rgba(43,30,64,.6);
+}
+.name {
+    margin-top: 16px;
+    font-family: "Press Start 2P", monospace;
+    font-size: clamp(22px, 5.2vw, 44px); line-height: 1.22;
+    color: #fff7f1;
+    text-shadow: 0 0 18px rgba(255,210,170,.65), 4px 4px 0 #5a4878;
+}
+.role {
+    margin-top: 18px; font-size: 22px; font-weight: 600; color: #fff2ea;
+    text-shadow: 2px 2px 0 rgba(43,30,64,.5);
+}
+.here {
+    margin-top: 10px; font-size: 16px; color: #ffe6d6;
+    display: inline-flex; align-items: center; gap: 8px;
+}
+.contacts { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; }
+.contacts .chip { font-size: 14px; }
+
+/* two columns */
+.cols {
+    margin-top: 44px;
+    display: grid; grid-template-columns: 1fr 330px; gap: 26px; align-items: start;
+}
+.side { position: sticky; top: 18px; display: grid; gap: 18px; }
+
+.panel { backdrop-filter: blur(2px); }
+
+.sec-title {
+    display: inline-flex; align-items: center; gap: 11px; margin: 0 0 18px;
+    font-family: "Press Start 2P", monospace; font-size: 14px; color: #fff7f1;
+    text-shadow: 2px 2px 0 #5a4878;
+}
+
+/* summary */
+.summary { padding: 22px 24px; font-size: 17.5px; }
+.summary p { margin: 0 0 12px; }
+.summary p:last-child { margin: 0; }
+.summary .lead { font-size: 19px; color: #443a5e; }
+
+/* ascent timeline */
+.ascent { position: relative; margin-left: 8px; padding-left: 34px; }
+.ascent::before {
+    content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 4px;
+    background-image: linear-gradient(#fff, #fff);
+    background-size: 4px 10px; background-repeat: repeat-y;
+    background: repeating-linear-gradient(#ffffffcc 0 6px, transparent 6px 12px);
+}
+.stop { position: relative; margin-bottom: 20px; }
+.stop .way {
+    position: absolute; left: -34px; top: 6px;
+    width: 18px; height: 18px; border: 3px solid var(--ink);
+    background: var(--accent, #ef9fc0); border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(255,255,255,.5), 0 0 14px var(--accent, #ef9fc0);
+}
+.stop .card { padding: 16px 20px 18px; }
+.stop.cur .way { animation: pulse 1.8s steps(4) infinite; }
+@keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 4px rgba(255,255,255,.5), 0 0 10px var(--accent); }
+    50% { box-shadow: 0 0 0 6px rgba(255,255,255,.35), 0 0 22px var(--accent); }
+}
+.j-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 14px; align-items: baseline; }
+.j-role { font-size: 19px; font-weight: 700; color: var(--ink); }
+.j-co { font-size: 15px; color: #6c5d88; margin-top: 2px; }
+.j-co a { color: #6c5d88; }
+.j-when { font-family: "Silkscreen", monospace; font-size: 11px; color: #8678a3; white-space: nowrap; }
+.j-when b { color: var(--ink); }
+.proj { margin: 10px 0 8px; font-size: 14px; color:#6c5d88; }
+ul.bul { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+ul.bul li { position: relative; padding-left: 20px; font-size: 15.5px; color: #4d4168; }
+ul.bul li::before {
+    content: ""; position: absolute; left: 1px; top: 7px; width: 8px; height: 8px;
+    background: var(--accent, #ef9fc0); border: 2px solid var(--ink);
+}
+.cur-tag {
+    display: inline-block; font-family: "Silkscreen", monospace; font-size: 9px;
+    letter-spacing: 1px; background: var(--mint); border: 2px solid var(--ink);
+    padding: 2px 6px; border-radius: 2px; margin-left: 8px; vertical-align: 2px;
+}
+.earlier { padding: 14px 18px; font-size: 15px; color: #4d4168; display:flex; gap:11px; align-items:flex-start; }
+
+/* sidebar pieces */
+.s-avatar { padding: 16px; text-align: center; }
+.avatar-frame {
+    display: inline-block; padding: 6px; border: 3px solid var(--ink); border-radius: 3px;
+    background: repeating-linear-gradient(45deg, #efe2f3 0 8px, #e6d4ee 8px 16px);
+}
+.avatar-frame img { display: block; width: 120px; height: 120px; image-rendering: pixelated; }
+.s-card { padding: 16px 18px; }
+.s-card h3 {
+    font-family: "Silkscreen", monospace; font-size: 12px; letter-spacing: 1px;
+    color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.grp { margin-bottom: 12px; }
+.grp:last-child { margin-bottom: 0; }
+.grp .lbl { font-size: 12px; color: #8678a3; font-family: "Silkscreen", monospace; letter-spacing: .5px; margin-bottom: 6px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag2 {
+    font-size: 13px; padding: 3px 8px; border: 2px solid var(--ink); border-radius: 2px;
+    background: rgba(255,255,255,.7); box-shadow: 2px 2px 0 0 var(--shadow);
+}
+.lang .l { display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; margin-bottom: 5px; }
+.lang .l .v { font-family: "Silkscreen", monospace; font-size: 11px; color:#8678a3; font-weight:400; }
+.lang .bar { margin-bottom: 12px; }
+.edu .deg { font-size: 15.5px; font-weight: 700; color: var(--ink); }
+.edu .sub { font-size: 13.5px; color: #6c5d88; margin-top: 4px; }
+
+.foot { margin-top: 40px; text-align:center; color:#ffe6d6; font-size:14px; display:flex; flex-direction:column; align-items:center; gap:12px; }
+.dl {
+    display: inline-flex; align-items: center; gap: 9px; background: var(--mint);
+    border: 3px solid var(--ink); border-radius: 2px; padding: 10px 18px;
+    font-family: "Silkscreen", monospace; font-size: 12px; letter-spacing: 1px;
+    color: var(--ink); text-decoration: none; box-shadow: 4px 4px 0 0 rgba(43,30,64,.4); cursor: pointer;
+}
+.dl:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 rgba(43,30,64,.4); }
+.dl:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 0 rgba(43,30,64,.4); }
+
+@media (max-width: 860px) {
+    .cols { grid-template-columns: 1fr; }
+    .side { position: static; order: -1; }
+}

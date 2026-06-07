@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pavel Novaikin — Front-End Lead</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --col: 760px;
+    --sans: "Archivo", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  html[data-theme="light"] {
+    --paper:   #ecedef;
+    --paper-2: #e3e5ea;
+    --tint:    #e7e9ed;
+    --line:    #cfd4dc;
+    --line-2:  #bcc3ce;
+    --ink:     #1f232a;
+    --ink-2:   #494f5a;
+    --muted:   #828997;
+    --accent:  #5c7ea7;
+    --accent-2:#4a6a92;
+    --accent-soft: rgba(92, 126, 167, 0.10);
+    --chip-bg: rgba(31, 35, 42, 0.055);
+    --green:   #6a9a5f;
+  }
+  html[data-theme="dark"] {
+    --paper:   #15171c;
+    --paper-2: #1c1f25;
+    --tint:    #1d2026;
+    --line:    #2b2f37;
+    --line-2:  #3a3f49;
+    --ink:     #eef1f6;
+    --ink-2:   #c0c6d1;
+    --muted:   #7f8794;
+    --accent:  #7e9fcb;
+    --accent-2:#94afd6;
+    --accent-soft: rgba(126, 159, 203, 0.14);
+    --chip-bg: rgba(238, 241, 246, 0.06);
+    --green:   #84b06f;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--ink-2);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  .page { max-width: var(--col); margin: 0 auto; padding: 0 26px 120px; }
+
+  /* ---- top bar ---- */
+  .topbar {
+    max-width: var(--col); margin: 0 auto; padding: 18px 26px;
+    display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  }
+  .tbtn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.3px;
+    color: var(--ink-2); background: var(--paper-2);
+    border: 1px solid var(--line-2); border-radius: 7px;
+    padding: 7px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none;
+  }
+  .tbtn:hover { border-color: var(--accent); color: var(--ink); }
+  .tbtn .ico { width: 13px; height: 13px; display: inline-block; }
+
+  /* ---- mono helpers ---- */
+  .mono { font-family: var(--mono); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent);
+  }
+  .kicker {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* ---- badge ---- */
+  .badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.4px;
+    color: var(--ink-2); background: var(--paper-2);
+    border: 1px solid var(--line-2); border-radius: 999px; padding: 7px 15px;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 25%, transparent);
+  }
+
+  /* ---- hero ---- */
+  .hero { padding-top: 30px; }
+  h1.name {
+    font-family: var(--sans); font-weight: 900;
+    font-size: clamp(54px, 12vw, 104px); line-height: 0.92;
+    letter-spacing: -0.035em; color: var(--ink);
+    margin: 22px 0 0; text-wrap: balance;
+  }
+  h1.name .reddot { color: var(--accent); }
+  .role-eyebrow { margin-top: 20px; }
+  .tagline {
+    font-family: var(--sans); font-weight: 600;
+    font-size: clamp(21px, 3.4vw, 27px); line-height: 1.28;
+    color: var(--ink); letter-spacing: -0.01em; margin-top: 22px;
+  }
+  .tagline .em { color: var(--accent); }
+
+  .summary {
+    font-family: var(--mono); font-size: 13px; line-height: 1.85;
+    color: var(--muted); background: var(--tint);
+    border: 1px solid var(--line); border-radius: 9px;
+    padding: 16px 18px; margin-top: 28px;
+  }
+  .summary b { color: var(--ink-2); font-weight: 500; }
+
+  .cta-row { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 26px; }
+  .btn {
+    font-family: var(--mono); font-size: 13.5px; font-weight: 500;
+    padding: 11px 18px; border-radius: 9px; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 9px;
+    border: 1px solid transparent; transition: transform 0.12s, filter 0.15s;
+  }
+  .btn.primary { background: var(--accent); color: #fff8f4; }
+  .btn.primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .btn.ghost { background: var(--paper-2); border-color: var(--line-2); color: var(--ink-2); }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--ink); }
+
+  .links {
+    display: flex; flex-wrap: wrap; gap: 7px 22px; margin-top: 24px;
+    font-family: var(--mono); font-size: 13px;
+  }
+  .links a {
+    color: var(--ink-2); text-decoration: none; position: relative; padding-bottom: 2px;
+  }
+  .links a::after {
+    content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1.5px;
+    background: var(--accent); transition: right 0.22s ease;
+  }
+  .links a:hover { color: var(--ink); }
+  .links a:hover::after { right: 0; }
+
+  /* ---- open to ---- */
+  .opento {
+    margin-top: 34px; border: 1px solid var(--line);
+    border-left: 3px solid var(--accent); border-radius: 9px;
+    background: var(--tint); padding: 16px 20px;
+  }
+  .opento .roles {
+    margin-top: 9px; font-size: 16px; color: var(--ink); line-height: 1.7;
+  }
+  .opento .roles .sep { color: var(--accent); margin: 0 5px; }
+
+  /* ---- stats ---- */
+  .stats {
+    margin-top: 18px; display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--line); border-radius: 11px; overflow: hidden;
+    background: var(--paper-2);
+  }
+  .stat { padding: 22px 18px; border-right: 1px solid var(--line); }
+  .stat:last-child { border-right: 0; }
+  .stat .num {
+    font-family: var(--sans); font-weight: 800; color: var(--accent);
+    font-size: 40px; line-height: 1; letter-spacing: -0.02em;
+  }
+  .stat .num .u { font-size: 19px; font-weight: 700; }
+  .stat .cap {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.4;
+    color: var(--muted); margin-top: 12px;
+  }
+
+  /* ---- section frame ---- */
+  section { margin-top: 64px; }
+  .sec-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; padding-bottom: 14px; margin-bottom: 26px;
+    border-bottom: 1px solid var(--line);
+  }
+  .sec-head h2 {
+    font-family: var(--sans); font-weight: 800; color: var(--ink);
+    font-size: 25px; letter-spacing: -0.015em; margin: 0;
+  }
+
+  .lead { font-size: 18px; color: var(--ink); line-height: 1.6; }
+  .body-p { margin: 14px 0 0; color: var(--ink-2); }
+  .body-p .hi { color: var(--ink); font-weight: 600; }
+
+  /* proof points */
+  .proof-label { margin: 26px 0 12px; }
+  .proof { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pp {
+    border: 1px solid var(--line); border-radius: 9px; background: var(--tint);
+    padding: 14px 16px; font-size: 14.5px; line-height: 1.5; color: var(--ink-2);
+    display: flex; gap: 11px;
+  }
+  .pp .pin {
+    flex: none; width: 7px; height: 7px; margin-top: 8px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .pp b { color: var(--ink); font-weight: 600; }
+
+  .stackline {
+    margin-top: 26px; font-family: var(--mono); font-size: 12.5px; line-height: 1.8;
+    color: var(--muted); border-top: 1px dashed var(--line-2); padding-top: 18px;
+  }
+  .stackline .k { color: var(--accent); font-weight: 700; }
+  .stackline .v { color: var(--ink-2); }
+
+  /* ---- experience ---- */
+  .xp { display: flex; flex-direction: column; }
+  .job {
+    display: grid; grid-template-columns: 44px 1fr; gap: 4px 20px;
+    padding: 26px 0; border-top: 1px solid var(--line);
+  }
+  .job:first-child { border-top: 0; padding-top: 4px; }
+  .job .idx {
+    font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent);
+    padding-top: 5px; letter-spacing: 0.5px;
+  }
+  .job .when {
+    grid-column: 2; font-family: var(--mono); font-size: 12px; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline;
+  }
+  .job .when .dur { color: var(--ink-2); }
+  .job .when .loc { color: var(--muted); }
+  .job .ttl {
+    grid-column: 2; font-family: var(--sans); font-weight: 700; font-size: 19px;
+    color: var(--ink); margin-top: 6px; letter-spacing: -0.01em;
+  }
+  .job .ttl .at { color: var(--muted); font-weight: 500; }
+  .job .ttl .co { color: var(--accent); }
+  .job .ttl .now {
+    font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: var(--accent); border: 1px solid var(--accent); border-radius: 5px;
+    padding: 2px 6px; vertical-align: 3px; margin-left: 8px;
+  }
+  .job .proj {
+    grid-column: 2; font-size: 14.5px; color: var(--ink-2); margin-top: 8px;
+  }
+  .job ul {
+    grid-column: 2; margin: 12px 0 0; padding: 0; list-style: none;
+    display: grid; gap: 7px;
+  }
+  .job li { position: relative; padding-left: 19px; font-size: 15px; color: var(--ink-2); }
+  .job li::before {
+    content: ""; position: absolute; left: 2px; top: 9px; width: 5px; height: 5px;
+    border-radius: 50%; background: var(--accent);
+  }
+  .job li b { color: var(--ink); font-weight: 600; }
+  .job .tags {
+    grid-column: 2; margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px;
+  }
+  .tag {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.3px;
+    color: var(--ink-2); border: 1px solid var(--line-2); border-radius: 6px;
+    padding: 3px 9px; background: var(--paper);
+  }
+  /* highlighted current role */
+  .job.now {
+    background: var(--accent-soft); border-radius: 12px;
+    border-top: 0; padding: 24px 22px; margin-bottom: 4px;
+    position: relative;
+  }
+  .job.now::before {
+    content: ""; position: absolute; left: 0; top: 16px; bottom: 16px; width: 3px;
+    background: var(--accent); border-radius: 2px;
+  }
+  .job.earlier { color: var(--ink-2); }
+  .job.earlier .txt { grid-column: 2; font-size: 14.5px; }
+  .job.earlier .txt b { color: var(--ink); }
+
+  /* ---- toolkit ---- */
+  .kit { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .kcard {
+    border: 1px solid var(--line); border-radius: 14px; background: var(--paper-2);
+    padding: 22px 24px;
+  }
+  .kcard .glabel {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.5px;
+    text-transform: lowercase; color: var(--muted); margin-bottom: 16px;
+  }
+  .kcard .tiles { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tile {
+    font-family: var(--mono); font-size: 13px; line-height: 1.3; color: var(--ink-2);
+    background: var(--chip-bg); border-radius: 7px; padding: 6px 11px; white-space: nowrap;
+  }
+  .tile:hover { color: var(--ink); background: var(--accent-soft); }
+
+  .allskills { margin-top: 18px; }
+  .allskills .tiles { gap: 7px; }
+
+  /* ---- two col foot blocks ---- */
+  .duo { display: grid; grid-template-columns: 1.25fr 1fr; gap: 22px; }
+  .card {
+    border: 1px solid var(--line); border-radius: 11px; background: var(--paper-2);
+    padding: 20px 22px;
+  }
+  .card h3 {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 14px; font-weight: 700;
+  }
+  .edu .deg { font-family: var(--sans); font-weight: 700; font-size: 17px; color: var(--ink); }
+  .edu .sub { font-size: 14.5px; color: var(--ink-2); margin-top: 6px; }
+  .edu .yr { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 12px; }
+  .lang .row { margin-bottom: 16px; }
+  .lang .row:last-child { margin-bottom: 0; }
+  .lang .lr { display: flex; justify-content: space-between; align-items: baseline; }
+  .lang .lr .n { font-weight: 600; color: var(--ink); font-size: 16px; }
+  .lang .lr .v { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .meter { height: 6px; border-radius: 3px; background: var(--line); margin-top: 9px; overflow: hidden; }
+  .meter > span { display: block; height: 100%; background: var(--accent); }
+
+  /* ---- contact footer ---- */
+  .contact {
+    margin-top: 72px; border-top: 1px solid var(--line); padding-top: 40px;
+  }
+  .contact h2 {
+    font-family: var(--sans); font-weight: 900; color: var(--ink);
+    font-size: clamp(30px, 6vw, 48px); letter-spacing: -0.03em; line-height: 1.02; margin: 0;
+  }
+  .contact h2 .reddot { color: var(--accent); }
+  .contact .sub { margin-top: 16px; font-size: 16.5px; color: var(--ink-2); }
+  .contact .sub a { color: var(--accent); text-decoration: none; border-bottom: 1.5px solid currentColor; }
+  .colophon {
+    margin-top: 46px; display: flex; flex-wrap: wrap; justify-content: space-between;
+    gap: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  }
+
+  /* ---- responsive ---- */
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat:nth-child(2) { border-right: 0; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+    .proof, .kit, .duo { grid-template-columns: 1fr; }
+    .job { grid-template-columns: 1fr; gap: 2px; }
+    .job .idx { display: none; }
+    .job .when, .job .ttl, .job .proj, .job ul, .job .tags, .job.earlier .txt { grid-column: 1; }
+    .job.now { padding: 20px 18px; }
+  }
+
+  /* ---- print ---- */
+  @media print {
+    @page { margin: 14mm; }
+    .topbar, .cta-row, .no-print { display: none !important; }
+    html[data-theme] { --paper:#fff; --paper-2:#fff; --tint:#faf7f1; }
+    body { background: #fff; font-size: 10.5pt; }
+    section, .stats { break-inside: avoid; }
+    .job { break-inside: avoid; }
+    a { text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar no-print">
+  <button class="tbtn" id="theme-toggle" type="button" aria-label="Toggle theme">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path></svg>
+    <span id="theme-label">Dark</span>
+  </button>
+  <a class="tbtn" href="javascript:window.print()">Download CV</a>
+</div>
+
+<main class="page">
+
+  <!-- ===================== HERO ===================== -->
+  <header class="hero" data-screen-label="Hero">
+    <span class="badge"><span class="dot"></span> Open to work · Remote-friendly · Tbilisi, Georgia</span>
+
+    <h1 class="name">Pavel<br />Novaikin<span class="reddot">.</span></h1>
+
+    <div class="eyebrow role-eyebrow">Front-End Senior / Lead Developer</div>
+
+    <p class="tagline">Ten years turning messy, complex requirements into<br /><span class="em">clean, reliable products</span> — and three years leading the team that ships them.</p>
+
+    <div class="summary">
+      <b>10 yrs</b> front-end · <b>3 yrs</b> as team lead · <b>30K</b> daily active users · fintech · crypto · media · large-scale sports · <b>React</b> · <b>Vue / Nuxt</b> · <b>TypeScript</b> · greenfield setup · code review &amp; mentoring · performance
+    </div>
+
+    <div class="cta-row">
+      <a class="btn primary" href="javascript:window.print()">Download CV (PDF)</a>
+      <a class="btn ghost" href="mailto:novaikin@gmail.com">novaikin@gmail.com</a>
+    </div>
+
+    <nav class="links">
+      <a href="https://github.com/vorjyga" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://t.me/Pavel_Novaikin" target="_blank" rel="noreferrer">Telegram</a>
+      <a href="https://linkedin.com/in/novaikin" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="https://novaikin.com" target="_blank" rel="noreferrer">novaikin.com</a>
+    </nav>
+
+    <div class="opento">
+      <div class="eyebrow">Open to</div>
+      <div class="roles">Front-End Lead <span class="sep">·</span> Tech Lead <span class="sep">·</span> Senior Front-End <span class="sep">·</span> Front-End Architect <span class="sep">·</span> Engineering Lead</div>
+    </div>
+  </header>
+
+  <!-- ===================== STATS ===================== -->
+  <div class="stats">
+    <div class="stat"><div class="num">10<span class="u">+</span></div><div class="cap">years shipping<br />production front-ends</div></div>
+    <div class="stat"><div class="num">6</div><div class="cap">engineers in the<br />largest team I led</div></div>
+    <div class="stat"><div class="num">30<span class="u">K</span></div><div class="cap">daily active users<br />served &amp; scaled</div></div>
+    <div class="stat"><div class="num">20<span class="u">%</span></div><div class="cap">faster load times<br />after optimization</div></div>
+  </div>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section data-screen-label="About">
+    <div class="sec-head"><h2>About</h2><span class="kicker">// profile</span></div>
+
+    <p class="lead">Front-end developer turned team lead — 10 years building, scaling and owning web applications, the last three with lead responsibilities behind them.</p>
+
+    <p class="body-p">Over the past decade I've shipped products across <span class="hi">fintech, crypto, media, and large-scale sports platforms</span> — from real-time trading systems to a high-traffic news platform. Moving between such different domains taught me to get up to speed fast, pick the right approach for each problem, and stay independent of any single tool or framework.</p>
+
+    <p class="body-p">I've delivered and scaled apps serving tens of thousands of daily users, set up greenfield projects end to end, and grown teams through code review, mentoring, and technical hiring — working closely with backend, DevOps, and product. I also bring UI design sense, testing with Mocha &amp; Jest, and hands-on browser debugging &amp; performance work.</p>
+
+    <div class="eyebrow proof-label">Proof points</div>
+    <div class="proof">
+      <div class="pp"><span class="pin"></span><span>Shipped &amp; maintained <b>3 production apps</b> serving 30K daily active users at a crypto news platform.</span></div>
+      <div class="pp"><span class="pin"></span><span>Led a full <b>major-version framework upgrade</b> and stood up greenfield projects end to end.</span></div>
+      <div class="pp"><span class="pin"></span><span>Optimized data flow to <b>cut load times by 20%</b> across the main product.</span></div>
+      <div class="pp"><span class="pin"></span><span>Migrated a FinTech codebase <b>JavaScript → TypeScript</b> and refactored it toward SOLID.</span></div>
+    </div>
+
+    <div class="stackline">
+      <span class="k">core stack</span> &nbsp;<span class="v">TypeScript · React · Vue · Nuxt · Next · Angular · Node / Nest · GraphQL · Tailwind / SCSS · Vite · Feature-Sliced Design</span>
+    </div>
+  </section>
+
+  <!-- ===================== EXPERIENCE ===================== -->
+  <section data-screen-label="Experience">
+    <div class="sec-head"><h2>Experience</h2><span class="kicker">2017 — now</span></div>
+
+    <div class="xp">
+
+      <article class="job now">
+        <div class="idx">01</div>
+        <div class="when"><span>Nov 2025 — Present</span><span class="dur">7 months</span></div>
+        <div class="ttl">Front-End Team Lead <span class="at">at</span> <span class="co">News Company</span> <span class="at">(NDA)</span><span class="now">NOW</span></div>
+        <div class="proj">“The Times” in the crypto industry — a high-traffic news platform.</div>
+        <ul>
+          <li>Shipped &amp; maintained <b>3 production apps serving 30K daily active users</b>; led a full major-version framework upgrade and stood up greenfield projects end to end (ESLint, Prettier, Husky, Sentry, i18n, GTM, Grafana monitoring).</li>
+          <li>Owned engineering standards &amp; code quality — conventions, thorough reviews, a GitHub workflow with LLM-assisted self-review, automated CI quality gates, dependency upgrades.</li>
+          <li>Led a team of 3 front-end engineers — feature decomposition, tech-debt tracking in Jira, transparent estimation, technical interviews.</li>
+          <li>Drove cross-functional work with DevOps, backend, Product and the CTO.</li>
+        </ul>
+        <div class="tags"><span class="tag">Team Leadership</span><span class="tag">System Design</span><span class="tag">CI/CD</span><span class="tag">Sentry</span><span class="tag">Grafana</span><span class="tag">i18n</span></div>
+      </article>
+
+      <article class="job">
+        <div class="idx">02</div>
+        <div class="when"><span>Jun 2023 — Nov 2025</span><span class="dur">2 yrs 5 mos</span></div>
+        <div class="ttl">Senior Front-End Developer <span class="at">at</span> <span class="co">News Company</span> <span class="at">(NDA)</span></div>
+        <div class="proj">“The Times” in the crypto industry.</div>
+        <ul>
+          <li>Delivered several key sections of the main website, improving structure and UX consistency.</li>
+          <li>Contributed to a smooth, backward-compatible major framework migration.</li>
+          <li>Optimized how data is created, processed, stored &amp; presented — <b>cut load times 20%</b>.</li>
+          <li>Integrated 5 third-party APIs and 20+ partner widgets; stepped up to lead the team during the lead's absence.</li>
+        </ul>
+        <div class="tags"><span class="tag">Vue / Nuxt</span><span class="tag">Performance</span><span class="tag">API Integration</span><span class="tag">UX</span></div>
+      </article>
+
+      <article class="job">
+        <div class="idx">03</div>
+        <div class="when"><span>Apr 2022 — Jun 2023</span><span class="dur">1 yr 3 mos</span></div>
+        <div class="ttl">Senior Front-End Developer <span class="at">at</span> <span class="co">Cryptopay.me</span></div>
+        <ul>
+          <li>Built &amp; refined the core user dashboard used by <b>~20,000 customers</b>.</li>
+          <li>Created a new SPA presentation site — 5 core + 12 nested pages.</li>
+          <li>Built a standalone company blog with Strapi as a headless CMS.</li>
+        </ul>
+        <div class="tags"><span class="tag">SPA</span><span class="tag">Strapi</span><span class="tag">Dashboard</span></div>
+      </article>
+
+      <article class="job">
+        <div class="idx">04</div>
+        <div class="when"><span>Feb 2021 — Apr 2022</span><span class="dur">1 yr 3 mos</span></div>
+        <div class="ttl">Fullstack Developer <span class="at">at</span> <span class="co">Introduct tech</span></div>
+        <ul>
+          <li>Developed 2 mobile apps (Android &amp; iOS) with NativeScript + Angular.</li>
+          <li>Built a help-desk front-end and an isomorphic Nuxt.js web app from scratch.</li>
+          <li>Implemented Keycloak.js-based authorization.</li>
+        </ul>
+        <div class="tags"><span class="tag">NativeScript</span><span class="tag">Angular</span><span class="tag">Nuxt.js</span><span class="tag">Keycloak</span></div>
+      </article>
+
+      <article class="job">
+        <div class="idx">05</div>
+        <div class="when"><span>Jan 2019 — Apr 2021</span><span class="dur">2 yrs 4 mos</span><span class="loc">· FinTech</span></div>
+        <div class="ttl">Front-End Team Lead <span class="at">at</span> <span class="co">AAATrade</span></div>
+        <ul>
+          <li>Led a front-end team of <b>6</b> — scrums, mentoring, interviewing, task supervision.</li>
+          <li>Owned tech stack &amp; quality; introduced code review and incident management.</li>
+          <li>Migrated the project <b>JS → TypeScript</b>; refactored toward SOLID; reduced client CPU load.</li>
+          <li>Designed a middleware API and automated deploys (Bamboo).</li>
+        </ul>
+        <div class="tags"><span class="tag">Team Leadership</span><span class="tag">TypeScript</span><span class="tag">SOLID</span><span class="tag">Middleware</span></div>
+      </article>
+
+      <article class="job">
+        <div class="idx">06</div>
+        <div class="when"><span>Jan 2018 — Jan 2019</span><span class="dur">1 yr 1 mo</span><span class="loc">· Sports portal / CRM</span></div>
+        <div class="ttl">Front-End Developer <span class="at">at</span> <span class="co">Strict Logic</span></div>
+        <ul>
+          <li>Built my front-end module for a large, scalable system for a world sports association.</li>
+          <li>Stable <b>WebSocket</b> connection to middleware for real-time data.</li>
+          <li>Built an email-service front-end; gathered requirements directly with clients in Germany.</li>
+        </ul>
+        <div class="tags"><span class="tag">WebSocket</span><span class="tag">Real-time</span><span class="tag">Large-scale</span></div>
+      </article>
+
+      <article class="job">
+        <div class="idx">07</div>
+        <div class="when"><span>Jun 2017 — Jan 2018</span><span class="dur">8 months</span><span class="loc">· Travel service</span></div>
+        <div class="ttl">Front-End Developer <span class="at">at</span> <span class="co">Arview</span></div>
+        <ul>
+          <li>Crafted the service front-end from pixel-perfect designs.</li>
+          <li>Authored many custom Angular components; tested every feature at sprint's end.</li>
+        </ul>
+        <div class="tags"><span class="tag">Angular</span><span class="tag">Pixel-perfect</span></div>
+      </article>
+
+      <article class="job earlier">
+        <div class="idx">08</div>
+        <div class="txt"><b>Earlier · 2008 — 2016</b> &nbsp;Web Developer at Paraweb, and System Administrator at TUSUR (Tomsk State University of Control Systems &amp; Radioelectronics).</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===================== TOOLKIT ===================== -->
+  <section data-screen-label="Toolkit">
+    <div class="sec-head"><h2>Toolkit</h2><span class="kicker">10 groups</span></div>
+
+    <div class="kit">
+      <div class="kcard">
+        <div class="glabel">languages</div>
+        <div class="tiles"><span class="tile">TypeScript</span><span class="tile">JavaScript</span><span class="tile">Python</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">front end</div>
+        <div class="tiles"><span class="tile">React</span><span class="tile">Vue</span><span class="tile">Nuxt.js</span><span class="tile">Next.js</span><span class="tile">Angular</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">state management</div>
+        <div class="tiles"><span class="tile">Pinia</span><span class="tile">Vuex</span><span class="tile">Redux</span><span class="tile">Zustand</span><span class="tile">MobX</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">styling</div>
+        <div class="tiles"><span class="tile">Tailwind</span><span class="tile">SCSS</span><span class="tile">Bootstrap</span><span class="tile">Reka UI</span><span class="tile">Radix UI</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">backend &amp; apis</div>
+        <div class="tiles"><span class="tile">Node.js</span><span class="tile">Nest.js</span><span class="tile">Bun</span><span class="tile">FastAPI</span><span class="tile">GraphQL</span><span class="tile">REST</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">mobile</div>
+        <div class="tiles"><span class="tile">Expo</span><span class="tile">Ionic</span><span class="tile">Capacitor</span><span class="tile">Electron</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">cms · auth · baas</div>
+        <div class="tiles"><span class="tile">Payload.js</span><span class="tile">Strapi</span><span class="tile">Keycloak</span><span class="tile">Supabase</span><span class="tile">Firebase</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">testing</div>
+        <div class="tiles"><span class="tile">Vitest</span><span class="tile">Jest</span><span class="tile">Playwright</span><span class="tile">Cypress</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">build · devops</div>
+        <div class="tiles"><span class="tile">Vite</span><span class="tile">Webpack</span><span class="tile">Gitlab CI</span><span class="tile">Sentry</span><span class="tile">Lighthouse</span></div>
+      </div>
+      <div class="kcard">
+        <div class="glabel">architecture</div>
+        <div class="tiles"><span class="tile">Feature-Sliced Design</span><span class="tile">RxJS</span></div>
+      </div>
+    </div>
+
+    <div class="kcard allskills">
+      <div class="glabel">everything · all skills</div>
+      <div class="tiles">
+        <span class="tile">TypeScript</span><span class="tile">JavaScript</span><span class="tile">Python</span><span class="tile">React</span><span class="tile">Vue</span><span class="tile">Nuxt.js</span><span class="tile">Next.js</span><span class="tile">Angular</span><span class="tile">Pinia</span><span class="tile">Vuex</span><span class="tile">Redux</span><span class="tile">Zustand</span><span class="tile">MobX</span><span class="tile">Tailwind</span><span class="tile">SCSS</span><span class="tile">Bootstrap</span><span class="tile">Reka UI</span><span class="tile">Radix UI</span><span class="tile">Node.js</span><span class="tile">Nest.js</span><span class="tile">Bun</span><span class="tile">FastAPI</span><span class="tile">GraphQL</span><span class="tile">REST</span><span class="tile">Expo</span><span class="tile">Ionic</span><span class="tile">Capacitor</span><span class="tile">Electron</span><span class="tile">Payload.js</span><span class="tile">Strapi</span><span class="tile">Keycloak</span><span class="tile">Supabase</span><span class="tile">Firebase</span><span class="tile">Vitest</span><span class="tile">Jest</span><span class="tile">Playwright</span><span class="tile">Cypress</span><span class="tile">Vite</span><span class="tile">Webpack</span><span class="tile">Gitlab CI</span><span class="tile">Sentry</span><span class="tile">Lighthouse</span><span class="tile">Feature-Sliced Design</span><span class="tile">RxJS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EDU + LANG ===================== -->
+  <section data-screen-label="Education">
+    <div class="sec-head"><h2>Education &amp; languages</h2><span class="kicker">// credentials</span></div>
+    <div class="duo">
+      <div class="card edu">
+        <h3>Education</h3>
+        <div class="deg">Tomsk State University of Control Systems &amp; Radioelectronics</div>
+        <div class="sub">Faculty of Management Systems · Data Processing &amp; Information (TUSUR)</div>
+        <div class="yr">2018 · Bachelor</div>
+      </div>
+      <div class="card lang">
+        <h3>Languages</h3>
+        <div class="row">
+          <div class="lr"><span class="n">Russian</span><span class="v">NATIVE</span></div>
+          <div class="meter"><span style="width:100%"></span></div>
+        </div>
+        <div class="row">
+          <div class="lr"><span class="n">English</span><span class="v">C1 · ADVANCED</span></div>
+          <div class="meter"><span style="width:85%"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <footer class="contact" data-screen-label="Contact">
+    <h2>Let's build something<br />reliable<span class="reddot">.</span></h2>
+    <p class="sub">Reach me at <a href="mailto:novaikin@gmail.com">novaikin@gmail.com</a> or <a href="https://t.me/Pavel_Novaikin" target="_blank" rel="noreferrer">@Pavel_Novaikin</a> on Telegram.</p>
+    <div class="colophon">
+      <span>Pavel Novaikin · Front-End Senior / Lead · Tbilisi, Georgia</span>
+      <span>Set in Archivo &amp; JetBrains Mono</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var label = document.getElementById("theme-label");
+    var saved = null;
+    try { saved = localStorage.getItem("cv-theme"); } catch (e) {}
+    if (saved) root.setAttribute("data-theme", saved);
+    function sync() {
+      var dark = root.getAttribute("data-theme") === "dark";
+      if (label) label.textContent = dark ? "Light" : "Dark";
+    }
+    sync();
+    var btn = document.getElementById("theme-toggle");
+    if (btn) btn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("cv-theme", next); } catch (e) {}
+      sync();
+    });
+  })();
+</script>
+</body>
+</html>

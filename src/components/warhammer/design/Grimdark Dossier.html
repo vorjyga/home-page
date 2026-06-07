@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Conscription Dossier — Cogitator-Wright P. Novaikin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Pirata+One&family=Stardos+Stencil:wght@400;700&family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --steel-0: #0d0e11;
+    --steel-1: #15171c;
+    --steel-2: #1d2027;
+    --steel-3: #262a33;
+    --steel-4: #313641;
+    --bevel-hi: rgba(255, 255, 255, 0.065);
+    --bevel-lo: rgba(0, 0, 0, 0.6);
+    --bone:   #d8cdb2;
+    --bone-2: #b9ad90;
+    --parch:  #cdc1a3;
+    --ink:    #e6e0d0;
+    --ink-dim:#9a937e;
+    --ink-mut:#73705f;
+    --blood:  #a8241f;
+    --blood-2:#c63a2b;
+    --blood-deep:#5f1411;
+    --rust:   #b65a2b;
+    --hazard: #d6a316;
+    --paper-ink: #211a0f;
+
+    --stamp:   "Black Ops One", system-ui, sans-serif;
+    --gothic:  "Pirata One", "Black Ops One", serif;
+    --stencil: "Stardos Stencil", monospace;
+    --body:    "Oswald", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background-color: var(--steel-1);
+    background-image:
+      radial-gradient(120% 80% at 50% -10%, #20242c 0%, transparent 55%),
+      radial-gradient(100% 60% at 50% 110%, #0a0b0e 0%, transparent 55%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 5px),
+      linear-gradient(180deg, #16181d, #101216);
+    color: var(--ink);
+    font-family: var(--body);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  ::selection { background: var(--blood); color: #fff; }
+
+  /* ===== shared atoms ===== */
+  .stencil { font-family: var(--stencil); }
+  .haz {
+    background-image: repeating-linear-gradient(45deg, var(--hazard) 0 15px, #131418 15px 30px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), inset 0 -2px 4px rgba(0,0,0,.5);
+  }
+  .eyebrow {
+    font-family: var(--stencil); font-weight: 700; font-size: 12px;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--blood-2);
+  }
+  .label {
+    font-family: var(--stencil); font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--ink-mut);
+  }
+
+  /* riveted metal plate */
+  .plate {
+    position: relative;
+    background:
+      linear-gradient(180deg, var(--steel-3) 0%, var(--steel-2) 18%, var(--steel-2) 82%, #181b21 100%);
+    border: 1px solid #0c0d10;
+    border-top-color: var(--steel-4);
+    box-shadow:
+      inset 0 1px 0 var(--bevel-hi),
+      inset 0 -3px 8px var(--bevel-lo),
+      0 6px 18px rgba(0,0,0,0.45);
+  }
+  .plate.rivets::before {
+    content: ""; position: absolute; inset: 7px; pointer-events: none; border-radius: 2px;
+    background-image:
+      radial-gradient(circle at 50% 50%, #4a4f5b 0 28%, #15171b 42%, transparent 58%),
+      radial-gradient(circle at 50% 50%, #4a4f5b 0 28%, #15171b 42%, transparent 58%),
+      radial-gradient(circle at 50% 50%, #4a4f5b 0 28%, #15171b 42%, transparent 58%),
+      radial-gradient(circle at 50% 50%, #4a4f5b 0 28%, #15171b 42%, transparent 58%);
+    background-repeat: no-repeat;
+    background-size: 11px 11px;
+    background-position: left top, right top, left bottom, right bottom;
+    opacity: .9;
+  }
+
+  /* parchment insert */
+  .parchment {
+    background:
+      radial-gradient(120% 140% at 0% 0%, #ddd2b6 0%, #cabd9d 55%, #b6a886 100%);
+    color: var(--paper-ink);
+    border: 1px solid #6a5c3e;
+    box-shadow: inset 0 0 40px rgba(120,90,40,.35), 0 6px 18px rgba(0,0,0,0.5);
+  }
+
+  .stamp-h {
+    font-family: var(--stamp); text-transform: uppercase;
+    color: var(--ink); letter-spacing: 1px; line-height: 1;
+  }
+  .gothic { font-family: var(--gothic); font-weight: 400; }
+
+  /* ===== layout ===== */
+  .scan { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 3px);
+    mix-blend-mode: multiply; opacity: .5; }
+  .vig { position: fixed; inset: 0; pointer-events: none; z-index: 59;
+    box-shadow: inset 0 0 220px rgba(0,0,0,.75); }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 90px; position: relative; z-index: 2; }
+
+  /* classification bars */
+  .classbar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    font-family: var(--stencil); font-weight: 700; font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: #14151a;
+    padding: 8px 16px; margin-top: 0; line-height: 1.55;
+    background: var(--hazard);
+    border-bottom: 2px solid #0c0d10;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -2px 4px rgba(0,0,0,.4);
+  }
+  .classbar .sn { margin-left: auto; color: #14151a; opacity: .8; letter-spacing: 1px; }
+  .topband { height: 15px; border-top: 3px solid #0c0d10; }
+
+  /* ===== hero ===== */
+  header.hero { margin-top: 22px; }
+  .hero-grid {
+    display: grid; grid-template-columns: 132px 1fr; gap: 26px; align-items: center;
+    padding: 26px 28px;
+  }
+  .crest { width: 132px; height: 132px; color: var(--bone); filter: drop-shadow(0 3px 4px rgba(0,0,0,.6)); }
+  .crest .ring2 { color: var(--blood-2); }
+  .desig { margin-bottom: 8px; }
+  h1.name {
+    font-family: var(--stamp); font-size: clamp(40px, 8.5vw, 82px); line-height: 0.92;
+    letter-spacing: 1px; color: var(--ink); margin: 6px 0 0;
+    text-shadow: 0 2px 0 #000, 0 0 26px rgba(168,36,31,.25);
+  }
+  .rankline { margin-top: 12px; font-family: var(--gothic); font-size: clamp(20px,2.6vw,28px); color: var(--bone); }
+  .rankline .sep { color: var(--blood-2); margin: 0 8px; }
+  .creed {
+    margin-top: 16px; font-size: 18px; font-weight: 300; color: var(--ink); max-width: 60ch;
+  }
+  .creed b { color: var(--bone); font-weight: 500; }
+
+  .vitals {
+    margin-top: 0; display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid #0c0d10;
+  }
+  .vital { padding: 13px 18px; border-right: 1px solid #0c0d10; border-left: 1px solid rgba(255,255,255,.03); }
+  .vital:first-child { border-left: 0; }
+  .vital:last-child { border-right: 0; }
+  .vital .k { font-family: var(--stencil); font-size: 10px; letter-spacing: 2px; color: var(--ink-mut); text-transform: uppercase; }
+  .vital .v { margin-top: 4px; font-size: 15px; color: var(--bone); font-weight: 400; }
+  .vital .v.live { color: var(--hazard); }
+
+  /* contact / vox */
+  .vox { display: flex; flex-wrap: wrap; gap: 9px; padding: 16px 28px 4px; }
+  .voxchan {
+    font-family: var(--stencil); font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--ink); text-decoration: none; padding: 8px 13px;
+    background: linear-gradient(180deg, var(--steel-3), var(--steel-2));
+    border: 1px solid #0c0d10; border-top-color: var(--steel-4);
+    box-shadow: inset 0 1px 0 var(--bevel-hi), 0 2px 5px rgba(0,0,0,.4);
+    display: inline-flex; align-items: center; gap: 8px; transition: color .12s, border-color .12s;
+  }
+  .voxchan:hover { color: var(--hazard); border-color: var(--blood); }
+  .voxchan .b { width: 7px; height: 7px; background: var(--blood-2); transform: rotate(45deg); }
+
+  /* ===== section heads ===== */
+  section { margin-top: 40px; }
+  .shead { display: flex; align-items: stretch; gap: 0; }
+  .shead .tab {
+    background: var(--blood); color: #f3e7d6; font-family: var(--stamp); text-transform: uppercase;
+    font-size: clamp(16px, 2.3vw, 22px); letter-spacing: 1px; padding: 11px 20px 9px;
+    border: 1px solid #0c0d10; box-shadow: inset 0 1px 0 rgba(255,255,255,.18), inset 0 -3px 8px rgba(0,0,0,.5);
+    display: inline-flex; align-items: center; gap: 12px; white-space: nowrap;
+  }
+  .shead .tab .num { font-family: var(--stencil); font-weight: 700; color: #e9c39a; opacity: .85; }
+  .shead .rail { flex: 1; }
+  .shead .rail.haz { border: 1px solid #0c0d10; border-left: 0; }
+  .shead .meta {
+    font-family: var(--stencil); font-size: 11px; letter-spacing: 2px; color: var(--ink-mut);
+    text-transform: uppercase; align-self: center; padding-left: 16px; white-space: nowrap;
+  }
+
+  /* ===== assessment (parchment) ===== */
+  .assess { margin-top: 18px; padding: 30px 34px; position: relative; }
+  .assess .dropcap::first-letter {
+    font-family: var(--gothic); font-size: 76px; line-height: .7; float: left;
+    margin: 6px 12px 0 0; color: var(--blood-deep);
+  }
+  .assess p { margin: 0 0 14px; font-weight: 400; }
+  .assess p:last-of-type { margin-bottom: 0; }
+  .assess .seal-watermark {
+    position: absolute; right: 18px; bottom: 12px; width: 120px; height: 120px;
+    color: rgba(95,20,17,.18); pointer-events: none;
+  }
+  .marks-label { margin: 26px 0 12px; }
+  .marks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mark {
+    background: rgba(33,26,15,.07); border: 1px solid #8a7a55; border-left: 4px solid var(--blood);
+    padding: 12px 15px; font-size: 15px; line-height: 1.45; color: var(--paper-ink); font-weight: 400;
+    display: flex; gap: 11px;
+  }
+  .mark .runemark { flex: none; font-family: var(--stamp); color: var(--blood); }
+  .mark b { font-weight: 600; }
+  .sanctioned {
+    margin-top: 26px; padding-top: 16px; border-top: 1px dashed #8a7a55;
+    font-family: var(--stencil); font-size: 12.5px; letter-spacing: .5px; color: #4f4226;
+  }
+  .sanctioned .k { color: var(--blood-deep); font-weight: 700; }
+
+  /* ===== service metrics ===== */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 18px; }
+  .metric { padding: 22px 18px 18px; border-right: 1px solid #0c0d10; text-align: center; position: relative; }
+  .metric:last-child { border-right: 0; }
+  .metric .big {
+    font-family: var(--stamp); font-size: clamp(34px, 5vw, 50px); line-height: 1;
+    color: var(--bone); text-shadow: 0 2px 0 #000;
+  }
+  .metric .big .s { color: var(--blood-2); }
+  .metric .cap { margin-top: 12px; font-family: var(--stencil); font-size: 11px; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--ink-dim); line-height: 1.45; }
+
+  /* ===== campaign record ===== */
+  .tours { margin-top: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .tour { padding: 0; overflow: hidden; }
+  .tour .top {
+    display: grid; grid-template-columns: 58px 1fr auto; gap: 0 18px; align-items: center;
+    padding: 14px 20px; border-bottom: 1px solid #0c0d10;
+    background: linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+  }
+  .tour .rn {
+    font-family: var(--stamp); font-size: 26px; color: var(--blood-2); text-align: center;
+    text-shadow: 0 2px 0 #000;
+  }
+  .tour .ti .theatre { font-family: var(--gothic); font-size: 22px; color: var(--bone); line-height: 1.1; }
+  .tour .ti .realrole {
+    font-family: var(--stencil); font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--ink-dim); margin-top: 4px;
+  }
+  .tour .ti .realrole .rk { color: var(--blood-2); }
+  .tour .when { text-align: right; font-family: var(--stencil); font-size: 11px; letter-spacing: 1px;
+    color: var(--ink-mut); text-transform: uppercase; line-height: 1.5; }
+  .tour .when b { display: block; color: var(--bone); font-weight: 700; }
+  .tour .body { padding: 14px 20px 18px; }
+  .tour ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .tour li { position: relative; padding-left: 22px; font-size: 15.5px; font-weight: 300; color: var(--ink); }
+  .tour li::before {
+    content: ""; position: absolute; left: 2px; top: 9px; width: 8px; height: 8px;
+    background: var(--blood); transform: rotate(45deg); box-shadow: 0 0 0 1px #000;
+  }
+  .tour li b { color: var(--bone); font-weight: 500; }
+  .wargear { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; }
+  .gear {
+    font-family: var(--stencil); font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--ink); padding: 4px 10px; border: 1px solid #0c0d10;
+    background: linear-gradient(180deg, var(--steel-3), var(--steel-1));
+    box-shadow: inset 0 1px 0 var(--bevel-hi);
+  }
+  .tour.active .top { background: linear-gradient(180deg, rgba(168,36,31,.22), rgba(168,36,31,.05)); }
+  .tour.active { box-shadow: inset 0 0 0 1px var(--blood-deep), inset 0 1px 0 var(--bevel-hi), inset 0 -3px 8px var(--bevel-lo), 0 6px 18px rgba(0,0,0,.45); }
+  .activetag {
+    font-family: var(--stencil); font-weight: 700; font-size: 10px; letter-spacing: 1.5px;
+    color: #14151a; background: var(--hazard); padding: 3px 8px; margin-left: 10px; vertical-align: 3px;
+    display: inline-block; box-shadow: 0 1px 2px rgba(0,0,0,.5);
+  }
+  .tour.earlier .body { padding: 16px 20px; font-size: 15px; color: var(--ink-dim); }
+  .tour.earlier b { color: var(--bone); }
+
+  /* ===== disciplines / wargear ===== */
+  .disc { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+  .dcard { padding: 18px 20px; }
+  .dcard .glabel {
+    font-family: var(--stencil); font-weight: 700; font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--blood-2); margin-bottom: 4px;
+  }
+  .dcard .gsub { font-family: var(--stencil); font-size: 10px; letter-spacing: 1px; color: var(--ink-mut);
+    text-transform: uppercase; margin-bottom: 14px; }
+  .tiles { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tile {
+    font-family: var(--stencil); font-size: 12.5px; letter-spacing: .5px; color: var(--ink);
+    background: rgba(0,0,0,.28); border: 1px solid #0c0d10; border-top-color: rgba(255,255,255,.05);
+    padding: 5px 11px; white-space: nowrap;
+  }
+  .tile:hover { color: var(--hazard); border-color: var(--blood); }
+
+  /* ===== schola + tongues ===== */
+  .duo { margin-top: 18px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
+  .block { padding: 20px 22px; }
+  .block h3 {
+    font-family: var(--stamp); text-transform: uppercase; font-size: 16px; letter-spacing: 1px;
+    color: var(--bone); margin: 0 0 14px;
+  }
+  .schola .deg { font-family: var(--gothic); font-size: 20px; color: var(--bone); line-height: 1.15; }
+  .schola .sub { font-size: 15px; color: var(--ink-dim); margin-top: 8px; font-weight: 400; }
+  .schola .yr { margin-top: 12px; font-family: var(--stencil); font-size: 12px; letter-spacing: 1px;
+    color: var(--blood-2); text-transform: uppercase; }
+  .tongue { margin-bottom: 16px; }
+  .tongue:last-child { margin-bottom: 0; }
+  .tongue .tr { display: flex; justify-content: space-between; align-items: baseline; }
+  .tongue .n { font-size: 16px; color: var(--bone); }
+  .tongue .lv { font-family: var(--stencil); font-size: 11px; letter-spacing: 1px; color: var(--ink-mut); text-transform: uppercase; white-space: nowrap; }
+  .gauge { height: 9px; margin-top: 8px; background: rgba(0,0,0,.4); border: 1px solid #0c0d10; overflow: hidden; }
+  .gauge > span { display: block; height: 100%;
+    background: repeating-linear-gradient(90deg, var(--blood-2) 0 7px, var(--blood-deep) 7px 10px); }
+
+  /* ===== footer / petition ===== */
+  .petition { margin-top: 50px; padding: 34px 30px; text-align: center; }
+  .petition .gothic { font-size: clamp(26px, 5vw, 44px); color: var(--bone); line-height: 1.05; }
+  .petition .gothic .r { color: var(--blood-2); }
+  .petition .sub { margin-top: 14px; font-size: 16px; color: var(--ink-dim); }
+  .petition .sub a { color: var(--hazard); text-decoration: none; border-bottom: 1px solid currentColor; }
+  .colophon {
+    margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+    font-family: var(--stencil); font-size: 10.5px; letter-spacing: 1px; color: var(--ink-mut); text-transform: uppercase;
+  }
+  .colophon a { color: var(--ink-mut); cursor: pointer; }
+
+  /* ===== OATH overlay ===== */
+  body:not(.sworn) .lockable { filter: grayscale(.65) brightness(.62) contrast(.95); }
+  body.stamping .lockable { animation: unlock .8s ease forwards; }
+  @keyframes unlock { from { filter: grayscale(.65) brightness(.62) contrast(.95); } to { filter: none; } }
+  #oath {
+    position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+    background: radial-gradient(60% 60% at 50% 45%, rgba(10,11,14,.82), rgba(6,7,9,.96));
+    cursor: pointer; text-align: center; padding: 20px;
+  }
+  body.sworn #oath { opacity: 0; visibility: hidden; pointer-events: none; }
+  body.stamping #oath { animation: dismiss .6s ease .15s forwards; }
+  @keyframes dismiss { 0% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+  #oath .prompt { max-width: 560px; }
+  #oath .classified {
+    font-family: var(--stencil); font-weight: 700; letter-spacing: 5px; color: var(--blood-2);
+    font-size: 13px; text-transform: uppercase;
+  }
+  #oath .otitle { font-family: var(--gothic); font-size: clamp(30px,6vw,52px); color: var(--bone); margin: 14px 0 6px; line-height: 1.05; }
+  #oath .oath-text { font-size: 17px; color: var(--ink-dim); font-style: italic; max-width: 44ch; margin: 10px auto 0; }
+  .sealbtn {
+    position: relative; width: 210px; height: 210px; margin: 26px auto 8px;
+    display: grid; place-items: center; color: var(--blood-2);
+  }
+  .sealbtn .ink { position: absolute; inset: 0; }
+  .sealbtn .hint {
+    position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%);
+    font-family: var(--stencil); font-weight: 700; font-size: 12px; letter-spacing: 3px;
+    color: var(--hazard); text-transform: uppercase; white-space: nowrap;
+  }
+  .sealbtn:hover { color: var(--blood); }
+  .sealbtn .pulse { position: absolute; inset: 18px; border: 2px solid var(--blood-2); border-radius: 50%;
+    animation: pulsering 2.2s ease-out infinite; opacity: 0; }
+  @keyframes pulsering { 0% { transform: scale(.7); opacity: .6; } 100% { transform: scale(1.25); opacity: 0; } }
+
+  /* stamped seal that lands on the dossier */
+  #brand {
+    position: fixed; z-index: 90; top: 90px; right: 26px; width: 150px; height: 150px;
+    color: var(--blood); pointer-events: none; opacity: 0; transform: rotate(-14deg) scale(2.6);
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,.6));
+    mix-blend-mode: normal;
+  }
+  body.stamping #brand { animation: slam .5s cubic-bezier(.2,.9,.3,1) forwards; }
+  body.sworn #brand { opacity: .92; transform: rotate(-14deg) scale(1); }
+  @keyframes slam {
+    0% { opacity: 0; transform: rotate(-26deg) scale(2.6); }
+    62% { opacity: 1; transform: rotate(-12deg) scale(.92); }
+    78% { transform: rotate(-15deg) scale(1.04); }
+    100% { opacity: .92; transform: rotate(-14deg) scale(1); }
+  }
+  #flash { position: fixed; inset: 0; z-index: 95; background: #fff; opacity: 0; pointer-events: none; }
+  body.stamping #flash { animation: flash .5s ease-out forwards; }
+  @keyframes flash { 0% { opacity: 0; } 8% { opacity: .5; } 100% { opacity: 0; } }
+  body.stamping .wrap { animation: shake .42s ease-in-out; }
+  @keyframes shake {
+    0%,100% { transform: translate(0,0); }
+    20% { transform: translate(-3px, 2px); }
+    40% { transform: translate(4px, -2px); }
+    60% { transform: translate(-3px, -1px); }
+    80% { transform: translate(2px, 2px); }
+  }
+
+  /* shockwave burst at the stamp */
+  #shock {
+    position: fixed; z-index: 94; top: 90px; right: 26px; width: 150px; height: 150px;
+    border: 3px solid var(--blood-2); border-radius: 50%; opacity: 0; pointer-events: none;
+    box-shadow: 0 0 24px rgba(198,58,43,.5);
+  }
+  body.stamping #shock { animation: shock .6s ease-out; }
+  @keyframes shock { 0% { transform: scale(.2); opacity: .85; } 100% { transform: scale(2.3); opacity: 0; } }
+
+  /* entrance stagger as the dossier powers up */
+  body.activated .wrap > * { animation: rise .6s cubic-bezier(.2,.7,.3,1) both; }
+  body.activated .wrap > *:nth-child(1) { animation-delay: .02s; }
+  body.activated .wrap > *:nth-child(2) { animation-delay: .12s; }
+  body.activated .wrap > *:nth-child(3) { animation-delay: .22s; }
+  body.activated .wrap > *:nth-child(4) { animation-delay: .32s; }
+  body.activated .wrap > *:nth-child(5) { animation-delay: .42s; }
+  body.activated .wrap > *:nth-child(6) { animation-delay: .52s; }
+  body.activated .wrap > *:nth-child(7) { animation-delay: .60s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  body.lit .wrap > * { opacity: 1 !important; } /* safety net: never leave content hidden */
+
+  /* ambient: warning light, live-status glow, CRT sweep, seal pulse */
+  .tour.active .activetag { animation: warnblink 1.5s steps(1) infinite; }
+  @keyframes warnblink { 0%, 55% { opacity: 1; } 55.01%, 100% { opacity: .32; } }
+  .vital .v.live { animation: livepulse 2.4s ease-in-out infinite; }
+  @keyframes livepulse { 0%,100% { text-shadow: 0 0 0 rgba(214,163,22,0); } 50% { text-shadow: 0 0 12px rgba(214,163,22,.6); } }
+  .scan::after {
+    content: ""; position: absolute; left: 0; right: 0; top: -160px; height: 160px;
+    background: linear-gradient(180deg, transparent, rgba(150,170,190,.05) 60%, rgba(150,170,190,.10), transparent);
+    animation: sweep 7.5s linear infinite;
+  }
+  @keyframes sweep { 0% { transform: translateY(0); } 100% { transform: translateY(120vh); } }
+  body.sworn:not(.stamping) #brand { animation: sealglow 3.2s ease-in-out infinite; }
+  @keyframes sealglow {
+    0%, 100% { filter: drop-shadow(0 3px 5px rgba(0,0,0,.6)); }
+    50% { filter: drop-shadow(0 3px 5px rgba(0,0,0,.6)) drop-shadow(0 0 9px rgba(198,58,43,.7)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sealbtn .pulse,
+    body.stamping #brand, body.stamping #flash, body.stamping .wrap, body.stamping #shock,
+    body.stamping #oath, body.stamping .lockable,
+    body.activated .wrap > *,
+    .tour.active .activetag, .vital .v.live, .scan::after, body.sworn:not(.stamping) #brand { animation: none !important; }
+  }
+
+  /* ===== responsive ===== */
+  @media (max-width: 720px) {
+    .hero-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 14px; }
+    .creed { text-align: left; }
+    .vitals { grid-template-columns: 1fr 1fr; }
+    .vital:nth-child(2) { border-right: 0; }
+    .vital:nth-child(1), .vital:nth-child(2) { border-bottom: 1px solid #0c0d10; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .metric:nth-child(2) { border-right: 0; }
+    .metric:nth-child(1), .metric:nth-child(2) { border-bottom: 1px solid #0c0d10; }
+    .marks, .disc, .duo { grid-template-columns: 1fr; }
+    .tour .top { grid-template-columns: 40px 1fr; }
+    .tour .when { grid-column: 2; text-align: left; margin-top: 6px; }
+    #brand { width: 96px; height: 96px; top: 70px; right: 12px; }
+  }
+
+  /* ===== print ===== */
+  @media print {
+    @page { margin: 12mm; }
+    body { background: #fff !important; color: #1a1a1a; }
+    .scan, .vig, #oath, #brand, #flash, .no-print { display: none !important; }
+    body:not(.sworn) .lockable { filter: none !important; }
+    .plate, .parchment { box-shadow: none !important; break-inside: avoid; }
+    section, .tour { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="scan"></div>
+<div class="vig"></div>
+
+<!-- stamped service seal (lands after oath) -->
+<svg id="brand" viewBox="0 0 100 100" aria-hidden="true">
+  <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  <circle cx="50" cy="50" r="39" fill="none" stroke="currentColor" stroke-width="1"/>
+  <g fill="currentColor">
+    <rect x="46" y="26" width="8" height="40" rx="1"/>
+    <rect x="36" y="24" width="28" height="11" rx="1.5"/>
+  </g>
+  <polyline points="30,46 44,46 38,58 52,58 44,74" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round"/>
+  <g fill="currentColor">
+    <circle cx="50" cy="7" r="2"/><circle cx="93" cy="50" r="2"/><circle cx="50" cy="93" r="2"/><circle cx="7" cy="50" r="2"/>
+    <circle cx="80" cy="20" r="1.6"/><circle cx="80" cy="80" r="1.6"/><circle cx="20" cy="80" r="1.6"/><circle cx="20" cy="20" r="1.6"/>
+  </g>
+</svg>
+
+<!-- OATH overlay -->
+<div id="oath" role="button" tabindex="0" aria-label="Swear the oath of service">
+  <div class="prompt">
+    <div class="classified">// CLASSIFIED — CONSCRIPTION SEALED //</div>
+    <div class="otitle gothic">Oath of Service</div>
+    <p class="oath-text">“I bind my hands to the work, my mind to the war, and my name to the Dominion. Let the record open.”</p>
+    <div class="sealbtn" id="sealbtn">
+      <span class="pulse"></span>
+      <svg class="ink" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="50" cy="50" r="39" fill="none" stroke="currentColor" stroke-width="1"/>
+        <g fill="currentColor">
+          <rect x="46" y="26" width="8" height="40" rx="1"/>
+          <rect x="36" y="24" width="28" height="11" rx="1.5"/>
+        </g>
+        <polyline points="30,46 44,46 38,58 52,58 44,74" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linejoin="round"/>
+        <g fill="currentColor">
+          <circle cx="50" cy="7" r="2"/><circle cx="93" cy="50" r="2"/><circle cx="50" cy="93" r="2"/><circle cx="7" cy="50" r="2"/>
+        </g>
+      </svg>
+      <span class="hint">▼ Press to seal ▼</span>
+    </div>
+    <div class="classified" style="color:var(--ink-mut); letter-spacing:3px;">Apply seal to open the dossier</div>
+  </div>
+</div>
+<div id="flash"></div>
+<div id="shock"></div>
+
+<!-- ===================== DOSSIER ===================== -->
+<div class="lockable">
+
+<div class="haz topband"></div>
+<div class="classbar">
+  <span>Conscription Bureau · Iron Dominion</span>
+  <span>Clearance: Obsidian</span>
+  <span class="sn">DOSSIER № IDB-7741-NVK · M3</span>
+</div>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <header class="hero" data-screen-label="Hero">
+    <div class="plate rivets hero-grid">
+      <svg class="crest" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="ring2" cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="1"/>
+        <g fill="currentColor">
+          <rect x="46" y="27" width="8" height="40" rx="1"/>
+          <rect x="36" y="25" width="28" height="11" rx="1.5"/>
+        </g>
+        <polyline points="31,47 45,47 39,58 53,58 45,73" fill="none" stroke="var(--blood-2)" stroke-width="3.4" stroke-linejoin="round"/>
+        <g fill="currentColor">
+          <circle cx="50" cy="8" r="2"/><circle cx="92" cy="50" r="2"/><circle cx="50" cy="92" r="2"/><circle cx="8" cy="50" r="2"/>
+          <circle cx="79" cy="21" r="1.5"/><circle cx="79" cy="79" r="1.5"/><circle cx="21" cy="79" r="1.5"/><circle cx="21" cy="21" r="1.5"/>
+        </g>
+      </svg>
+      <div>
+        <div class="eyebrow desig">Cogitator-Wright · Forge-Sergeant</div>
+        <h1 class="name">PAVEL NOVAIKIN</h1>
+        <div class="rankline gothic">Master-Wright of the War-Cogitators <span class="sep">✠</span> Tenth Cohort</div>
+        <p class="creed">Ten years <b>forging the war-cogitators</b> of the Dominion — the glowing helm-glyphs through which warriors see and command. Three years <b>commanding the wrights</b> who keep them burning. I take the formless decree and beat it into a weapon that serves both the soldier and the throne.</p>
+      </div>
+    </div>
+
+    <div class="plate vitals">
+      <div class="vital"><div class="k">Designation</div><div class="v">Cogitator-Wright</div></div>
+      <div class="vital"><div class="k">Origin World</div><div class="v">Tomsk-Forge</div></div>
+      <div class="vital"><div class="k">Holdfast</div><div class="v">Tbilisi Bastion</div></div>
+      <div class="vital"><div class="k">Status</div><div class="v live" data-status>Awaiting Oath</div></div>
+    </div>
+
+    <div class="plate" style="margin-top:14px;">
+      <div class="vox">
+        <a class="voxchan" href="mailto:novaikin@gmail.com"><span class="b"></span> novaikin@gmail.com</a>
+        <a class="voxchan" href="https://github.com/vorjyga" target="_blank" rel="noreferrer"><span class="b"></span> Cipher-Vault · GitHub</a>
+        <a class="voxchan" href="https://t.me/Pavel_Novaikin" target="_blank" rel="noreferrer"><span class="b"></span> Vox · Telegram</a>
+        <a class="voxchan" href="https://linkedin.com/in/novaikin" target="_blank" rel="noreferrer"><span class="b"></span> Registry · LinkedIn</a>
+        <a class="voxchan" href="https://novaikin.com" target="_blank" rel="noreferrer"><span class="b"></span> Holo-Sigil · novaikin.com</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- SERVICE METRICS -->
+  <section data-screen-label="Metrics">
+    <div class="shead">
+      <span class="tab"><span class="num">I.</span> Service Record</span>
+      <span class="rail haz"></span>
+    </div>
+    <div class="plate rivets metrics">
+      <div class="metric"><div class="big">X<span class="s">+</span></div><div class="cap">years under arms<br />forging cogitators</div></div>
+      <div class="metric"><div class="big">VI</div><div class="cap">wrights led under<br />my command</div></div>
+      <div class="metric"><div class="big">30<span class="s">K</span></div><div class="cap">souls served daily<br />by my works</div></div>
+      <div class="metric"><div class="big">−20<span class="s">%</span></div><div class="cap">swifter cogitation<br />after my rites</div></div>
+    </div>
+  </section>
+
+  <!-- ASSESSMENT -->
+  <section data-screen-label="Assessment">
+    <div class="shead">
+      <span class="tab"><span class="num">II.</span> Adjutant's Assessment</span>
+      <span class="rail haz"></span>
+      <span class="meta">// for the recruiter's eyes</span>
+    </div>
+    <div class="parchment assess">
+      <p class="dropcap">A wright turned commander. Across ten years he has built, scaled and held the war-cogitators of the Dominion through campaigns in the coin-vaults, the exchange-bastions, the colosseum data-vaults and the high news-spires — from real-time trading engines to a news-platform that ten-times-three-thousand souls touch each day.</p>
+      <p>Moving between such different theatres has taught him to make ready with grim speed, to choose the right rite for each war, and to swear fealty to no single tool or machine-spirit. He has raised greenfield works from bare rockcrete, hardened them against the warp of bad data, and grown cadres of wrights through review, mentorship and the trial of recruits — fighting shoulder to shoulder with the Enginseers (backend), the Watch (DevOps) and the Strategos (product).</p>
+      <p>He brings, besides, an artificer's eye for heraldry and form, the proofing-rites of Mocha and Jest, and a relentless hand at hunting faults in the cogitator's deepest cogs.</p>
+
+      <div class="eyebrow marks-label">Marks of Distinction</div>
+      <div class="marks">
+        <div class="mark"><span class="runemark">✠</span><span>Raised &amp; held <b>three war-cogitators</b> serving 30,000 souls daily upon the high news-spire.</span></div>
+        <div class="mark"><span class="runemark">✠</span><span>Led a <b>full re-forging</b> of the war-frame to its next great mark, and raised greenfield works end to end.</span></div>
+        <div class="mark"><span class="runemark">✠</span><span>Re-cut the data-rites to make the engine <b>one-fifth swifter</b> across the host.</span></div>
+        <div class="mark"><span class="runemark">✠</span><span>Converted a fintech war-frame <b>to the disciplined tongue (TypeScript)</b> and re-ordered it by SOLID law.</span></div>
+      </div>
+
+      <div class="sanctioned"><span class="k">SANCTIONED WARGEAR:</span> TypeScript · React · Vue · Nuxt · Next · Angular · Node / Nest · GraphQL · Tailwind / SCSS · Vite · Feature-Sliced Doctrine</div>
+      <svg class="seal-watermark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="3"/>
+        <rect x="46" y="27" width="8" height="40" fill="currentColor"/><rect x="36" y="25" width="28" height="11" fill="currentColor"/>
+        <polyline points="31,47 45,47 39,58 53,58 45,73" fill="none" stroke="currentColor" stroke-width="4"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- CAMPAIGN RECORD -->
+  <section data-screen-label="Campaigns">
+    <div class="shead">
+      <span class="tab"><span class="num">III.</span> Campaign Record</span>
+      <span class="rail haz"></span>
+      <span class="meta">// 2017 — present</span>
+    </div>
+    <div class="tours">
+
+      <article class="plate tour active">
+        <div class="top">
+          <div class="rn">I</div>
+          <div class="ti">
+            <div class="theatre">The High News-Spire <span class="activetag">Active Theatre</span></div>
+            <div class="realrole"><span class="rk">Front-End Team Lead</span> · News Company (NDA) · “The Times” of crypto</div>
+          </div>
+          <div class="when">Nov 2025 — Present<b>7 months</b></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Raised &amp; held <b>three war-cogitators serving 30,000 souls daily</b>; led a full re-forging of the war-frame to its next great mark and raised greenfield works end to end (ESLint, Prettier, Husky, Sentry, i18n, GTM, Grafana watch-wards).</li>
+            <li>Kept the law of the forge — conventions, unflinching review, a review-rite augured by machine-oracles (LLM self-review), automated quality-gates, and the upkeep of all dependencies.</li>
+            <li>Commanded a cadre of three wrights — breaking war into tasks, tracking debt in Jira, shielding them with honest reckoning, and trialing recruits.</li>
+            <li>Stood between the Enginseers (backend), the Watch (DevOps), the Strategos (product) and the Lord-Commander (CTO).</li>
+          </ul>
+          <div class="wargear"><span class="gear">Command</span><span class="gear">War-Architecture</span><span class="gear">CI/CD</span><span class="gear">Sentry</span><span class="gear">Grafana</span><span class="gear">i18n</span></div>
+        </div>
+      </article>
+
+      <article class="plate tour">
+        <div class="top">
+          <div class="rn">II</div>
+          <div class="ti">
+            <div class="theatre">The News-Spire, Lesser Walls</div>
+            <div class="realrole"><span class="rk">Senior Front-End Developer</span> · News Company (NDA) · crypto</div>
+          </div>
+          <div class="when">Jun 2023 — Nov 2025<b>2 yrs 5 mos</b></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Forged several key bastions of the main holdfast, mending its structure and the soldier's sightlines.</li>
+            <li>Bore the war-frame through a great-mark migration without breaking the old ways.</li>
+            <li>Re-cut how data is wrought, stored and shown — <b>one-fifth swifter</b>.</li>
+            <li>Bound 5 foreign engines and 20+ allied wards into the core; took command when the sergeant was felled from the field.</li>
+          </ul>
+          <div class="wargear"><span class="gear">Vue / Nuxt</span><span class="gear">Swiftness</span><span class="gear">Vox-Links</span><span class="gear">Sightlines</span></div>
+        </div>
+      </article>
+
+      <article class="plate tour">
+        <div class="top">
+          <div class="rn">III</div>
+          <div class="ti">
+            <div class="theatre">The Coin-Reliquary</div>
+            <div class="realrole"><span class="rk">Senior Front-End Developer</span> · Cryptopay.me</div>
+          </div>
+          <div class="when">Apr 2022 — Jun 2023<b>1 yr 3 mos</b></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Forged &amp; sharpened the core war-table (user dashboard) borne by <b>~20,000 souls</b>.</li>
+            <li>Raised a new herald-spire — a single-frame work of 5 great halls and 12 nested chambers.</li>
+            <li>Built a standalone chronicle (blog) as its own work, bound to a Strapi reliquary.</li>
+          </ul>
+          <div class="wargear"><span class="gear">Single-Frame</span><span class="gear">Strapi</span><span class="gear">War-Table</span></div>
+        </div>
+      </article>
+
+      <article class="plate tour">
+        <div class="top">
+          <div class="rn">IV</div>
+          <div class="ti">
+            <div class="theatre">The Wandering Cohort</div>
+            <div class="realrole"><span class="rk">Fullstack Developer</span> · Introduct tech</div>
+          </div>
+          <div class="when">Feb 2021 — Apr 2022<b>1 yr 3 mos</b></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Forged two field-cogitators (Android &amp; iOS) with NativeScript and Angular.</li>
+            <li>Raised a help-desk front and an isomorphic Nuxt work from bare rockcrete.</li>
+            <li>Set a ward-gate of authorization upon Keycloak.</li>
+          </ul>
+          <div class="wargear"><span class="gear">NativeScript</span><span class="gear">Angular</span><span class="gear">Nuxt</span><span class="gear">Keycloak</span></div>
+        </div>
+      </article>
+
+      <article class="plate tour">
+        <div class="top">
+          <div class="rn">V</div>
+          <div class="ti">
+            <div class="theatre">The Exchange-Bastion</div>
+            <div class="realrole"><span class="rk">Front-End Team Lead</span> · AAATrade · FinTech</div>
+          </div>
+          <div class="when">Jan 2019 — Apr 2021<b>2 yrs 4 mos</b></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Commanded a cadre of <b>six wrights</b> — rites of muster, mentorship, the trial of recruits.</li>
+            <li>Held the armoury &amp; the law of quality; brought the rite of review and the watch over incidents.</li>
+            <li>Converted the war-frame <b>to the disciplined tongue (TypeScript)</b>; re-ordered it by SOLID law.</li>
+            <li>Cut the soldier's burden (client CPU) and forged a middleware engine with automated deployment (Bamboo).</li>
+          </ul>
+          <div class="wargear"><span class="gear">Command</span><span class="gear">TypeScript</span><span class="gear">SOLID</span><span class="gear">Middleware</span></div>
+        </div>
+      </article>
+
+      <article class="plate tour">
+        <div class="top">
+          <div class="rn">VI</div>
+          <div class="ti">
+            <div class="theatre">The Colosseum Data-Vaults</div>
+            <div class="realrole"><span class="rk">Front-End Developer</span> · Strict Logic · sports portal / CRM</div>
+          </div>
+          <div class="when">Jan 2018 — Jan 2019<b>1 yr 1 mo</b></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Forged my appointed bastion within a vast, scalable war-frame for a great world-spanning order of games.</li>
+            <li>Held a stable <b>vox-tether (WebSocket)</b> between front and middleware for real-time augur-data.</li>
+            <li>Raised an email-engine front; took the war-decree straight from clients in the Germanic holds.</li>
+          </ul>
+          <div class="wargear"><span class="gear">Vox-Tether</span><span class="gear">Real-Time</span><span class="gear">Vast Scale</span></div>
+        </div>
+      </article>
+
+      <article class="plate tour">
+        <div class="top">
+          <div class="rn">VII</div>
+          <div class="ti">
+            <div class="theatre">The Pilgrim-Routes</div>
+            <div class="realrole"><span class="rk">Front-End Developer</span> · Arview · travel service</div>
+          </div>
+          <div class="when">Jun 2017 — Jan 2018<b>8 months</b></div>
+        </div>
+        <div class="body">
+          <ul>
+            <li>Forged the service-front true to the pixel-perfect heraldry it was given.</li>
+            <li>Wrought many bespoke Angular wards; proofed every new rite at each muster's end.</li>
+          </ul>
+          <div class="wargear"><span class="gear">Angular</span><span class="gear">Pixel-True</span></div>
+        </div>
+      </article>
+
+      <article class="plate tour earlier">
+        <div class="top">
+          <div class="rn">VIII</div>
+          <div class="ti">
+            <div class="theatre">Initiate Years</div>
+            <div class="realrole">Web Developer · System Administrator</div>
+          </div>
+          <div class="when">2008 — 2016<b>the long muster</b></div>
+        </div>
+        <div class="body"><b>Before the wars of record</b> — served as Web-Wright at Paraweb and as Keeper of the Machines (System Administrator) at the Tomsk Schola (TUSUR), learning the cogs before he was trusted with the war.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- DISCIPLINES & WARGEAR -->
+  <section data-screen-label="Wargear">
+    <div class="shead">
+      <span class="tab"><span class="num">IV.</span> Battle Disciplines &amp; Wargear</span>
+      <span class="rail haz"></span>
+      <span class="meta">// ten armouries</span>
+    </div>
+    <div class="disc">
+      <div class="plate dcard"><div class="glabel">Machine-Tongues</div><div class="gsub">sanctioned cants</div><div class="tiles"><span class="tile">TypeScript</span><span class="tile">JavaScript</span><span class="tile">Python</span></div></div>
+      <div class="plate dcard"><div class="glabel">Helm-Glyph Craft</div><div class="gsub">the front of war</div><div class="tiles"><span class="tile">React</span><span class="tile">Vue</span><span class="tile">Nuxt.js</span><span class="tile">Next.js</span><span class="tile">Angular</span></div></div>
+      <div class="plate dcard"><div class="glabel">Memory-Rites</div><div class="gsub">state of the machine</div><div class="tiles"><span class="tile">Pinia</span><span class="tile">Vuex</span><span class="tile">Redux</span><span class="tile">Zustand</span><span class="tile">MobX</span></div></div>
+      <div class="plate dcard"><div class="glabel">War-Heraldry</div><div class="gsub">form &amp; styling</div><div class="tiles"><span class="tile">Tailwind</span><span class="tile">SCSS</span><span class="tile">Bootstrap</span><span class="tile">Reka UI</span><span class="tile">Radix UI</span></div></div>
+      <div class="plate dcard"><div class="glabel">Engine-Cant &amp; Vox-Links</div><div class="gsub">the deep machine</div><div class="tiles"><span class="tile">Node.js</span><span class="tile">Nest.js</span><span class="tile">Bun</span><span class="tile">FastAPI</span><span class="tile">GraphQL</span><span class="tile">REST</span></div></div>
+      <div class="plate dcard"><div class="glabel">Field-Cogitators</div><div class="gsub">borne to the front</div><div class="tiles"><span class="tile">Expo</span><span class="tile">Ionic</span><span class="tile">Capacitor</span><span class="tile">Electron</span></div></div>
+      <div class="plate dcard"><div class="glabel">Reliquaries &amp; Ward-Gates</div><div class="gsub">archive · auth · baas</div><div class="tiles"><span class="tile">Payload.js</span><span class="tile">Strapi</span><span class="tile">Keycloak</span><span class="tile">Supabase</span><span class="tile">Firebase</span></div></div>
+      <div class="plate dcard"><div class="glabel">Trials &amp; Proofing</div><div class="gsub">the testing rites</div><div class="tiles"><span class="tile">Vitest</span><span class="tile">Jest</span><span class="tile">Playwright</span><span class="tile">Cypress</span></div></div>
+      <div class="plate dcard"><div class="glabel">Forge-Rites &amp; Watch-Wards</div><div class="gsub">build · devops</div><div class="tiles"><span class="tile">Vite</span><span class="tile">Webpack</span><span class="tile">Gitlab CI</span><span class="tile">Sentry</span><span class="tile">Lighthouse</span></div></div>
+      <div class="plate dcard"><div class="glabel">War-Architecture</div><div class="gsub">the grand doctrine</div><div class="tiles"><span class="tile">Feature-Sliced Design</span><span class="tile">RxJS</span></div></div>
+    </div>
+  </section>
+
+  <!-- SCHOLA + TONGUES -->
+  <section data-screen-label="Schola">
+    <div class="shead">
+      <span class="tab"><span class="num">V.</span> Schola &amp; Tongues</span>
+      <span class="rail haz"></span>
+    </div>
+    <div class="duo">
+      <div class="plate rivets block schola">
+        <h3>Schola Training</h3>
+        <div class="deg">Tomsk Schola of Control-Systems &amp; Radio-Craft</div>
+        <div class="sub">Faculty of Management-Systems &amp; Data-Processing — TUSUR. Sanctioned in the Dominion-year 2018 at the rank of Bachelor-Adept.</div>
+        <div class="yr">2018 · Bachelor-Adept</div>
+      </div>
+      <div class="plate rivets block">
+        <h3>Tongues</h3>
+        <div class="tongue">
+          <div class="tr"><span class="n">Russian</span><span class="lv">Mother-Cant · Native</span></div>
+          <div class="gauge"><span style="width:100%"></span></div>
+        </div>
+        <div class="tongue">
+          <div class="tr"><span class="n">English</span><span class="lv">C1 · Trade-Gothic</span></div>
+          <div class="gauge"><span style="width:85%"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PETITION -->
+  <footer class="plate rivets petition" data-screen-label="Petition">
+    <div class="gothic">Summon this wright to your<br />war<span class="r">.</span></div>
+    <p class="sub">Send word by vox to <a href="mailto:novaikin@gmail.com">novaikin@gmail.com</a> or hail <a href="https://t.me/Pavel_Novaikin" target="_blank" rel="noreferrer">@Pavel_Novaikin</a> upon the Telegram-channel.</p>
+    <div class="colophon">
+      <span>Cogitator-Wright Pavel Novaikin · Tbilisi Bastion · Iron Dominion</span>
+      <span><a id="revoke" title="Reset the oath (demo)">↺ Revoke oath</a></span>
+    </div>
+  </footer>
+
+</main>
+
+<div class="haz" style="height:18px;"></div>
+</div><!-- /lockable -->
+
+<script>
+  (function () {
+    var body = document.body;
+    var KEY = "dossier-oath-sworn";
+    var statusEls = document.querySelectorAll("[data-status]");
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function setStatus(t) { statusEls.forEach(function (e) { e.textContent = t; }); }
+
+    function activate() {
+      setTimeout(function () { body.classList.add("activated"); }, 40);
+      setTimeout(function () { body.classList.add("lit"); }, 1600);
+    }
+
+    function markSworn() { body.classList.add("sworn"); setStatus("Oath Sworn — Cleared"); activate(); }
+
+    var actx = null;
+    function playStamp() {
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        actx = actx || new AC();
+        if (actx.state === "suspended") actx.resume();
+        var ctx = actx, now = ctx.currentTime;
+        // deep impact thud
+        var o = ctx.createOscillator(); o.type = "sine";
+        o.frequency.setValueAtTime(150, now);
+        o.frequency.exponentialRampToValueAtTime(42, now + 0.18);
+        var g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(0.95, now + 0.006);
+        g.gain.exponentialRampToValueAtTime(0.0008, now + 0.34);
+        o.connect(g).connect(ctx.destination); o.start(now); o.stop(now + 0.36);
+        // metallic noise crack
+        var dur = 0.22, buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+        var dt = buf.getChannelData(0);
+        for (var i = 0; i < dt.length; i++) dt[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / dt.length, 2.2);
+        var ns = ctx.createBufferSource(); ns.buffer = buf;
+        var bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1700; bp.Q.value = 0.7;
+        var ng = ctx.createGain(); ng.gain.setValueAtTime(0.55, now); ng.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        ns.connect(bp).connect(ng).connect(ctx.destination); ns.start(now); ns.stop(now + 0.22);
+        // metallic ring partials
+        [510, 860].forEach(function (f) {
+          var r = ctx.createOscillator(); r.type = "square"; r.frequency.value = f;
+          var rg = ctx.createGain();
+          rg.gain.setValueAtTime(0.0001, now + 0.008);
+          rg.gain.exponentialRampToValueAtTime(0.06, now + 0.02);
+          rg.gain.exponentialRampToValueAtTime(0.0004, now + 0.5);
+          r.connect(rg).connect(ctx.destination); r.start(now + 0.008); r.stop(now + 0.5);
+        });
+        // low power-up swell as the dossier wakes
+        var p = ctx.createOscillator(); p.type = "triangle";
+        p.frequency.setValueAtTime(55, now + 0.12);
+        p.frequency.exponentialRampToValueAtTime(190, now + 0.7);
+        var pg = ctx.createGain();
+        pg.gain.setValueAtTime(0.0001, now + 0.12);
+        pg.gain.exponentialRampToValueAtTime(0.12, now + 0.3);
+        pg.gain.exponentialRampToValueAtTime(0.0004, now + 0.85);
+        p.connect(pg).connect(ctx.destination); p.start(now + 0.12); p.stop(now + 0.9);
+      } catch (e) {}
+    }
+
+    var already = false;
+    try { already = localStorage.getItem(KEY) === "1"; } catch (e) {}
+    if (already) markSworn();
+
+    function swear() {
+      if (body.classList.contains("sworn")) return;
+      try { localStorage.setItem(KEY, "1"); } catch (e) {}
+      playStamp();
+      if (reduce) { markSworn(); return; }
+      body.classList.add("stamping");
+      setTimeout(function () {
+        body.classList.add("sworn");
+        setStatus("Oath Sworn — Cleared");
+        activate();
+      }, 360);
+      setTimeout(function () { body.classList.remove("stamping"); }, 900);
+    }
+
+    var oath = document.getElementById("oath");
+    if (oath) {
+      oath.addEventListener("click", swear);
+      oath.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); swear(); }
+      });
+    }
+
+    var revoke = document.getElementById("revoke");
+    if (revoke) revoke.addEventListener("click", function () {
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      body.classList.remove("sworn", "stamping", "activated", "lit");
+      setStatus("Awaiting Oath");
+      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    });
+  })();
+</script>
+</body>
+</html>

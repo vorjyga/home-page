@@ -1,0 +1,183 @@
+/* ===========================================================
+   base.css — shared pixel-resume foundation
+   Palette tokens live in each page's own <style> (theme block).
+   This file = reset, type, pixel panels, sprites, animations,
+   print rules. Indie-pixel / cozy aesthetic.
+   =========================================================== */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: "Pixelify Sans", system-ui, sans-serif;
+  color: var(--ink, #3a2e3f);
+  background: var(--bg, #fdf3e3);
+  line-height: 1.55;
+  font-size: 18px;
+  letter-spacing: 0.1px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+[data-sprite],
+.pixelated { image-rendering: pixelated; image-rendering: crisp-edges; }
+
+a { color: inherit; }
+
+/* ---------- type scale ---------- */
+.font-arcade { font-family: "Press Start 2P", "Pixelify Sans", monospace; }
+.font-label  { font-family: "Silkscreen", "Pixelify Sans", monospace; }
+
+h1, h2, h3 { margin: 0; line-height: 1.1; }
+
+.eyebrow {
+  font-family: "Silkscreen", monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted, #9b7e86);
+}
+
+/* ---------- pixel panel ---------- */
+.panel {
+  position: relative;
+  background: var(--panel, #fffaf0);
+  border: 3px solid var(--ink, #3a2e3f);
+  border-radius: 2px;
+  box-shadow: 6px 6px 0 0 var(--shadow, rgba(58, 46, 63, 0.22));
+}
+/* notched pixel corners */
+.panel.notch::before,
+.panel.notch::after,
+.panel.notch > .corner { content: ""; }
+.panel.notch::before,
+.panel.notch::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--bg, #fdf3e3);
+  pointer-events: none;
+}
+.panel.notch::before { top: -3px; left: -3px;
+  clip-path: polygon(0 0, 100% 0, 0 100%); }
+.panel.notch::after  { bottom: -3px; right: -3px;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+/* small solid corner pips for a UI feel */
+.pips::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--ink), var(--ink)) left 0 top 0 / 5px 5px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right 0 top 0 / 5px 5px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left 0 bottom 0 / 5px 5px no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right 0 bottom 0 / 5px 5px no-repeat;
+  opacity: 0.55;
+}
+
+/* ---------- pixel button / chip ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  background: var(--chip, #fff);
+  border: 2.5px solid var(--ink, #3a2e3f);
+  border-radius: 2px;
+  box-shadow: 3px 3px 0 0 var(--shadow, rgba(58, 46, 63, 0.22));
+  font-size: 15px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: transform 0.08s steps(2), box-shadow 0.08s steps(2),
+    background 0.12s;
+}
+a.chip:hover,
+.chip.interactive:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 0 var(--shadow, rgba(58, 46, 63, 0.22));
+  background: var(--chip-hi, var(--chip, #fff));
+}
+a.chip:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 var(--shadow); }
+
+/* ---------- sprites & decoration ---------- */
+[data-sprite] { vertical-align: top; }
+
+[data-pixel-field] { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.px-float {
+  position: absolute;
+  animation: floaty var(--dur, 6s) ease-in-out var(--delay, 0s) infinite;
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(calc(-1 * var(--amp, 10px))); }
+}
+
+.twinkle { animation: twinkle 2.4s steps(3) infinite; }
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* blinking text cursor */
+.caret {
+  display: inline-block;
+  width: 0.62em;
+  height: 1.05em;
+  margin-left: 4px;
+  transform: translateY(2px);
+  background: currentColor;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+
+/* press-in for whole cards on hover */
+.lift { transition: transform 0.1s steps(2), box-shadow 0.1s steps(2); }
+.lift:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 0 var(--shadow); }
+
+/* skill bar (subtle, decorative) */
+.bar {
+  height: 12px;
+  background: var(--bar-bg, rgba(58,46,63,.12));
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  overflow: hidden;
+  image-rendering: pixelated;
+}
+.bar > span {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg,
+    var(--bar, #f4a9b8) 0 8px, color-mix(in srgb, var(--bar, #f4a9b8) 75%, #000) 8px 10px);
+}
+
+/* dotted pixel divider */
+.dots {
+  height: 4px;
+  background-image: radial-gradient(var(--ink) 40%, transparent 42%);
+  background-size: 10px 4px;
+  opacity: 0.5;
+}
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .px-float, .twinkle, .caret { animation: none !important; }
+}
+
+/* ---------- print ---------- */
+@media print {
+  @page { margin: 12mm; }
+  body { background: #fff !important; font-size: 11pt; }
+  [data-pixel-field], .px-float, .no-print { display: none !important; }
+  .panel { box-shadow: none !important; break-inside: avoid; }
+  .lift { box-shadow: none !important; }
+  a[href]::after { content: ""; }
+  .page-break { break-before: page; }
+}

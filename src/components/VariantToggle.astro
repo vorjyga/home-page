@@ -11,9 +11,9 @@ const isLight = !isPixel && !isBased && !isWarhammer;
 ---
 <nav class:list={['variant-toggle', theme]} aria-label="Résumé style">
   <a href="/" class:list={['vt-opt', { active: isLight }]} aria-current={isLight ? 'page' : undefined}>Standard</a>
-  <a href="/pixels" class:list={['vt-opt', { active: isPixel }]} aria-current={isPixel ? 'page' : undefined}>Pixel</a>
-  <a href="/based" class:list={['vt-opt', { active: isBased }]} aria-current={isBased ? 'page' : undefined}>Editorial</a>
-  <a href="/warhammer" class:list={['vt-opt', { active: isWarhammer }]} aria-current={isWarhammer ? 'page' : undefined}>Grimdark</a>
+  <a href="/pixels/" class:list={['vt-opt', { active: isPixel }]} aria-current={isPixel ? 'page' : undefined}>Pixel</a>
+  <a href="/based/" class:list={['vt-opt', { active: isBased }]} aria-current={isBased ? 'page' : undefined}>Editorial</a>
+  <a href="/warhammer/" class:list={['vt-opt', { active: isWarhammer }]} aria-current={isWarhammer ? 'page' : undefined}>Grimdark</a>
 </nav>
 
 <style>

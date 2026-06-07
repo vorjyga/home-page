@@ -41,6 +41,7 @@ const jobs = [
         company: 'Introduct tech',
         dates: 'Feb 2021 — Apr 2022 · 1 year 3 months',
         position: 'Fullstack Developer',
+        site: 'introduct.tech',
         summary: 'Worked on several projects of different scales and directions:',
         items: [
             'Developed 2 mobile applications for Android and iOS using NativeScript with the Angular framework.',
@@ -115,7 +116,7 @@ function Experience() {
                             </span>
                         </div>
                         <p className="mt-0.5 text-slate-500">{job.position}</p>
-                        {job.site && <p className="mt-0.5 text-sm text-slate-400">{job.site}</p>}
+                        {job.site && <a href={`https://${job.site}`} target={'_blank'}><p className="mt-0.5 text-sm text-slate-400">{job.site}</p></a>}
 
                         {job.summary && <p className="mt-3 text-slate-700">{job.summary}</p>}
                         {job.project && (

@@ -1,6 +1,6 @@
 services:
   frontend:
-    build: ./frontend
+    build: .
     restart: unless-stopped
     networks:
       - web
@@ -10,22 +10,6 @@ services:
       - "traefik.http.routers.homyak.entrypoints=websecure"
       - "traefik.http.routers.homyak.tls.certresolver=letsencrypt"
       - "traefik.http.services.homyak.loadbalancer.server.port=3000"
-
-  # backend отключён: не собирается и не запускается.
-  # Данные сохранены на сервере в /var/data/homyak. Чтобы вернуть — раскомментируй блок.
-  # backend:
-  #   build: ./backend
-  #   restart: unless-stopped
-  #   volumes:
-  #     - /var/data/homyak:/app/data
-  #   networks:
-  #     - web
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.homyak-api.rule=Host(`novaikin.com`) && PathPrefix(`/api`)"
-  #     - "traefik.http.routers.homyak-api.entrypoints=websecure"
-  #     - "traefik.http.routers.homyak-api.tls.certresolver=letsencrypt"
-  #     - "traefik.http.services.homyak-api.loadbalancer.server.port=5000"
 
 networks:
   web:

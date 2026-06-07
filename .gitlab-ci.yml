@@ -8,29 +8,8 @@ deploy-frontend:
   only:
     refs:
       - main
-    changes:
-      - frontend/**/*
-      - docker-compose.yml
-      - .gitlab-ci.yml
   script:
-    # --exclude='/backend/data' — не трогаем рантайм-данные backend (их нет в репо, и прав на удаление нет)
-    - rsync -a --delete --exclude='.git' --exclude='.env' --exclude='/backend/data' . /home/gitlab-runner/homyak/
+    - rsync -a --delete --exclude='.git' --exclude='.env' . /home/gitlab-runner/homyak/
     - cd /home/gitlab-runner/homyak
-    # --remove-orphans уберёт контейнер backend, которого больше нет в docker-compose.yml
+    # --remove-orphans подчищает контейнер backend, оставшийся на сервере от прежних деплоев
     - docker compose up -d --build --remove-orphans frontend
-
-# backend отключён: ведущая точка делает джобу скрытым шаблоном — GitLab её не запускает.
-# Чтобы вернуть деплой backend — убери точку из имени (.deploy-backend -> deploy-backend).
-.deploy-backend:
-  stage: deploy
-  tags:
-    - vultr_group
-  only:
-    refs:
-      - main
-    changes:
-      - backend/**/*
-  script:
-    - rsync -a --delete --exclude='.git' --exclude='.env' --exclude='/backend/data' . /home/gitlab-runner/homyak/
-    - cd /home/gitlab-runner/homyak
-    - docker compose up -d --build backend

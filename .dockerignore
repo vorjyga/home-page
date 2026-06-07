@@ -6,5 +6,7 @@ dist-ssr
 .vscode
 *.log
 .DS_Store
+# на сервере может оставаться backend/data старого backend — не тащим его в build-контекст
+backend
 # проект использует @tailwindcss/vite, postcss-конфиг не нужен и ломает сборку
 postcss.config.*

@@ -11,7 +11,7 @@ function Skills() {
             <div className="mt-6 space-y-3">
                 {skills.map(({ area, items }) => (
                     <div key={area} className="flex items-start gap-6">
-                        <div className="w-52 shrink-0 whitespace-nowrap pt-2 text-slate-500">{area}</div>
+                        <div className="w-[30%] shrink-0 pt-2 text-slate-500 sm:w-52 sm:whitespace-nowrap">{area}</div>
                         <div className="flex flex-wrap gap-2">
                             {items.map((item) => (
                                 <span

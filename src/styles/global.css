@@ -23,7 +23,10 @@
         text-decoration: none;
     }
 
-    article {
+    /* Let multi-bullet jobs flow across a page break so pages fill up
+       instead of pushing a whole tall entry to the next page. Keep only
+       individual bullet points from splitting mid-line. */
+    li {
         break-inside: avoid;
     }
 }

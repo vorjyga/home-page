@@ -80,6 +80,12 @@ const isLight = !isPixel && !isBased && !isWarhammer;
   .pixel .vt-opt:not(.active):hover {
     color: #3c3158;
   }
+  /* Pixel is the widest theme (Silkscreen + letter-spacing). On small phones the
+     four options would clip "Grimdark", so tighten spacing to keep them on one row. */
+  @media (max-width: 480px) {
+    .variant-toggle.pixel { gap: 2px; padding: 2px; }
+    .pixel .vt-opt { padding: 6px 7px; letter-spacing: 0; }
+  }
 
   /* ---- based/editorial theme ---- */
   .variant-toggle.based {

@@ -2,7 +2,7 @@ import { summary } from '../../data/index.js'
 
 function Summary() {
     return (
-        <section className="mt-10 print:mt-4">
+        <section className="mt-5 print:mt-4">
             <div className="flex items-center gap-4">
                 <h2 className="shrink-0 text-xl font-normal text-slate-400">Summary</h2>
                 <span className="h-px flex-1 bg-slate-200" />

@@ -12,31 +12,31 @@ export const contacts = [
     {
         id: 'github',
         icon: 'github-icon',
-        label: 'github.com/vorjyga',
+        label: 'Github',
         href: 'https://github.com/vorjyga',
     },
     {
         id: 'linkedin',
         icon: 'linkedin-icon',
-        label: 'linkedin.com/in/novaikin',
+        label: 'Linkedin',
         href: 'https://www.linkedin.com/in/novaikin/',
     },
     {
         id: 'website',
         icon: 'website-icon',
-        label: 'novaikin.com',
+        label: 'Site',
         href: 'https://novaikin.com',
     },
     {
         id: 'telegram',
         icon: 'telegram-icon',
-        label: 't.me/Pavel_Novaikin',
+        label: 'Telegram',
         href: 'https://t.me/Pavel_Novaikin',
     },
     {
         id: 'email',
         icon: 'email-icon',
-        label: 'novaikin@gmail.com',
+        label: 'E-mail',
         href: 'mailto:novaikin@gmail.com',
     },
 ]

@@ -1,6 +1,6 @@
-import { experience, earlierExperience } from '../../data/index.js'
+import { experience as defaultExperience, earlierExperience as defaultEarlierExperience } from '../../data/index.js'
 
-function Experience() {
+function Experience({ experience = defaultExperience, earlierExperience = defaultEarlierExperience } = {}) {
     return (
         <section className="mt-5">
             <div className="flex items-center gap-4 print:break-after-avoid">

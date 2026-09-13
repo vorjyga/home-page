@@ -1,0 +1,13 @@
+---
+const enabled = import.meta.env.PROD;
+const scriptUrl = import.meta.env.PUBLIC_UMAMI_SCRIPT_URL || 'https://cloud.umami.is/script.js';
+const websiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID || '55a90479-f60c-47fc-85f5-05f905719786';
+---
+{enabled && <div hidden id="analytics-config" data-script-url={scriptUrl} data-website-id={websiteId}></div>}
+<script>
+  import { initializeAnalytics } from '../scripts/analytics.js';
+  const config = document.getElementById('analytics-config');
+  if (config && ['novaikin.com', 'www.novaikin.com'].includes(window.location.hostname)) {
+    initializeAnalytics(window, document, config.dataset);
+  }
+</script>

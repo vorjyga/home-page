@@ -1,0 +1,7 @@
+/* Shared UI utilities without Preflight, preserving the themed CV styles.
+   Important utilities override those themes' unlayered element selectors. */
+/* Declare the complete order before either stylesheet loads. Otherwise dev mode
+   can register utilities before base, making Preflight override CV utilities. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw) important;

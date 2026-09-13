@@ -8,6 +8,6 @@ export const languages = {
     aside: 'Spoken',
     items: [
         { lang: 'Russian', level: '— Native' },
-        { lang: 'English', level: '— C1 — Advanced' },
+        { lang: 'English', level: '— B2 — Upper-Intermediate' },
     ],
 }

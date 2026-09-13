@@ -115,7 +115,7 @@
       <div class="plate rivets metrics">
         <div class="metric"><div class="big">X<span class="s">+</span></div><div class="cap">years under arms<br />forging cogitators</div></div>
         <div class="metric"><div class="big">VI</div><div class="cap">wrights led under<br />my command</div></div>
-        <div class="metric"><div class="big">30<span class="s">K</span></div><div class="cap">souls served daily<br />by my works</div></div>
+        <div class="metric"><div class="big">8<span class="s">M</span></div><div class="cap">souls served monthly<br />at the peak</div></div>
         <div class="metric"><div class="big">−20<span class="s">%</span></div><div class="cap">swifter cogitation<br />after my rites</div></div>
       </div>
     </section>
@@ -128,13 +128,13 @@
         <span class="meta">// for the recruiter's eyes</span>
       </div>
       <div class="parchment assess">
-        <p class="dropcap">A wright turned commander. Across ten years he has built, scaled and held the war-cogitators of the Dominion through campaigns in the coin-vaults, the exchange-bastions, the colosseum data-vaults and the high news-spires — from real-time trading engines to a news-platform that ten-times-three-thousand souls touch each day.</p>
+        <p class="dropcap">A wright turned commander. Across ten years he has built, scaled and held the war-cogitators of the Dominion through campaigns in the coin-vaults, the exchange-bastions, the colosseum data-vaults and the high news-spires — from real-time trading engines to a news-platform that up to eight million souls touch each month at its peak.</p>
         <p>Moving between such different theatres has taught him to make ready with grim speed, to choose the right rite for each war, and to swear fealty to no single tool or machine-spirit. He has raised greenfield works from bare rockcrete, hardened them against the warp of bad data, and grown cadres of wrights through review, mentorship and the trial of recruits — fighting shoulder to shoulder with the Enginseers (backend), the Watch (DevOps) and the Strategos (product).</p>
         <p>He brings, besides, an artificer's eye for heraldry and form, the proofing-rites of Mocha and Jest, and a relentless hand at hunting faults in the cogitator's deepest cogs.</p>
 
         <div class="eyebrow marks-label">Marks of Distinction</div>
         <div class="marks">
-          <div class="mark"><span class="runemark">✠</span><span>Raised &amp; held <b>three war-cogitators</b> serving 30,000 souls daily upon the high news-spire.</span></div>
+          <div class="mark"><span class="runemark">✠</span><span>Raised &amp; held <b>three war-cogitators</b> serving up to 8 million souls per month at the peak upon the high news-spire.</span></div>
           <div class="mark"><span class="runemark">✠</span><span>Led a <b>full re-forging</b> of the war-frame to its next great mark, and raised greenfield works end to end.</span></div>
           <div class="mark"><span class="runemark">✠</span><span>Re-cut the data-rites to make the engine <b>one-fifth swifter</b> across the host.</span></div>
           <div class="mark"><span class="runemark">✠</span><span>Converted a fintech war-frame <b>to the disciplined tongue (TypeScript)</b> and re-ordered it by SOLID law.</span></div>
@@ -169,7 +169,7 @@
           </div>
           <div class="body">
             <ul>
-              <li>Raised &amp; held <b>three war-cogitators serving 30,000 souls daily</b>; led a full re-forging of the war-frame to its next great mark and raised greenfield works end to end (ESLint, Prettier, Husky, Sentry, i18n, GTM, Grafana watch-wards).</li>
+              <li>Raised &amp; held <b>three war-cogitators serving up to 8 million souls per month at the peak</b>; led a full re-forging of the war-frame to its next great mark and raised greenfield works end to end (ESLint, Prettier, Husky, Sentry, i18n, GTM, Grafana watch-wards).</li>
               <li>Kept the law of the forge — conventions, unflinching review, a review-rite augured by machine-oracles (LLM self-review), automated quality-gates, and the upkeep of all dependencies.</li>
               <li>Commanded a cadre of three wrights — breaking war into tasks, tracking debt in Jira, shielding them with honest reckoning, and trialing recruits.</li>
               <li>Stood between the Enginseers (backend), the Watch (DevOps), the Strategos (product) and the Lord-Commander (CTO).</li>
@@ -744,7 +744,7 @@
   /* stamped seal that lands on the dossier */
   #brand {
     position: fixed; z-index: 90; top: 90px; right: 26px; width: 150px; height: 150px;
-    color: var(--blood); pointer-events: none; opacity: 0; transform: rotate(-14deg) scale(2.6);
+    color: var(--blood); pointer-events: none; opacity: 0; transform: rotate(-14deg) scale(1);
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .6));
     mix-blend-mode: normal;
   }
@@ -816,6 +816,10 @@
 
   /* ===== responsive ===== */
   @media (max-width: 720px) {
+    .shead { flex-wrap: wrap; }
+    .shead .tab { white-space: normal; min-width: 0; max-width: 100%; padding-inline: 12px; }
+    .shead .meta { flex-basis: 100%; white-space: normal; padding: 8px 0 0; }
+
     .hero-grid { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 14px; }
     .creed { text-align: left; }
     .vitals { grid-template-columns: 1fr 1fr; }

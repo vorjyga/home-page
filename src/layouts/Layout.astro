@@ -1,11 +1,11 @@
 ---
-import VariantToggle from '../components/VariantToggle.astro';
+import Analytics from '../components/Analytics.astro';
 
 // variant: 'light' (base résumé, Tailwind) | 'pixel' (dusk pixel résumé) | 'based' (editorial résumé)
 // | 'warhammer' (grimdark conscription dossier).
-// Tailwind is imported by the base page itself, not here, so it never loads on
-// other routes. Each route only loads its own Google Fonts.
-const { title = 'My resume', variant = 'light' } = Astro.props;
+// Base CV pages load Tailwind with Preflight; shared UI uses prefixed utilities
+// without Preflight. Each route only loads its own Google Fonts.
+const { title = 'My resume', variant = 'light', bodyClass } = Astro.props;
 const isPixel = variant === 'pixel';
 const isBased = variant === 'based';
 const isWarhammer = variant === 'warhammer';
@@ -61,8 +61,8 @@ const isWarhammer = variant === 'warhammer';
     )}
     <title>{title}</title>
   </head>
-  <body>
-    <VariantToggle theme={variant === 'pixel' ? 'pixel' : variant === 'based' ? 'based' : variant === 'warhammer' ? 'warhammer' : 'light'} />
+  <body class={bodyClass}>
+    <Analytics />
     <slot />
   </body>
 </html>

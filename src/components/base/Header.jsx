@@ -1,6 +1,6 @@
-import { profile, contacts } from '../../data/index.js'
+import { profile as defaultProfile, contacts as defaultContacts } from '../../data/index.js'
 
-function Header() {
+function Header({ profile = defaultProfile, contacts = defaultContacts } = {}) {
     return (
         <header className="flex flex-col items-center gap-3 text-center">
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900">

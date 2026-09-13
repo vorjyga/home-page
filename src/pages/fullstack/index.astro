@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StandardResume from '../../components/base/StandardResume.astro';
+import { fullstackResume } from '../../data/resumes.js';
+---
+<Layout title="Pavel Novaikin — Full Stack Developer">
+  <StandardResume resume={fullstackResume} section="fullstack" showDownload />
+</Layout>

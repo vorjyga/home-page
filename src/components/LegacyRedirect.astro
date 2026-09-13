@@ -1,0 +1,13 @@
+---
+const { target } = Astro.props;
+---
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8" />
+  <title>Résumé moved</title>
+  <link rel="canonical" href={target} />
+  <meta name="robots" content="noindex" />
+  <script is:inline define:vars={{ target }}>
+    window.location.replace(target + window.location.search + window.location.hash);
+  </script>
+</head><body><p>This résumé has moved. <a href={target}>Continue to the résumé</a>.</p></body></html>

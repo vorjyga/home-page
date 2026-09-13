@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 @media print {
+    /* margin: 0 makes the browser drop its own header/footer
+       (date, page title, URL). Page spacing is restored via
+       .container padding below. */
     @page {
-        margin: 1cm 0.8cm;
+        margin: 0;
     }
 
     html {
@@ -10,12 +13,12 @@
         print-color-adjust: exact;
     }
 
-    /* Use the full page width and drop the on-screen top/side padding */
+    /* Use the full page width and move the page margins into padding
+       so the print header/footer stay gone. */
     .container {
         max-width: none !important;
         margin-top: 0 !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        padding: 1cm 0.8cm !important;
     }
 
     a {

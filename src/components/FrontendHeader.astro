@@ -1,0 +1,29 @@
+---
+import '../styles/utilities.css';
+
+const path = Astro.url.pathname.replace(/\/+$/, '');
+const variants = [
+  ['/frontend', 'Standard'], ['/frontend/pixels', 'Pixel'],
+  ['/frontend/based', 'Editorial'], ['/frontend/warhammer', 'Grimdark'],
+];
+---
+<header class="tw:relative tw:z-[110] tw:isolate tw:box-border tw:w-full tw:border-0 tw:border-b tw:border-solid tw:border-[#dce1e5] tw:bg-[#fafaf8] tw:text-left tw:font-[system-ui,sans-serif] tw:text-sm tw:leading-[1.4] tw:text-[#202b38] tw:print:hidden">
+  <nav class="tw:mx-auto tw:box-border tw:flex tw:w-full tw:max-w-[1160px] tw:flex-wrap tw:items-center tw:justify-between tw:gap-x-4 tw:gap-y-3 tw:px-7 tw:py-4 tw:max-[600px]:px-4 tw:max-[600px]:py-3" aria-label="Résumé style">
+    <div class="tw:flex tw:flex-wrap tw:items-center">
+      {variants.map(([href, label]) => (
+        <a
+          class="tw:rounded-sm tw:px-3 tw:py-1.5 tw:text-xs tw:text-inherit tw:no-underline tw:aria-[current=page]:bg-[#e5ebee] tw:aria-[current=page]:font-bold tw:hover:text-[#12706e] tw:focus-visible:outline-2 tw:focus-visible:outline-offset-4 tw:focus-visible:outline-[#12706e]"
+          href={`${href}/`}
+          aria-current={path === href ? 'page' : undefined}
+        >{label}</a>
+      ))}
+    </div>
+    <div>
+      <a
+        class="tw:inline-flex tw:items-center tw:gap-6 tw:rounded-md tw:bg-[#20394b] tw:px-4 tw:py-2.5 tw:text-xs tw:font-semibold tw:whitespace-nowrap tw:text-white tw:no-underline tw:focus-visible:outline-2 tw:focus-visible:outline-offset-4 tw:focus-visible:outline-[#12706e] tw:max-[600px]:gap-2 tw:max-[600px]:px-3 tw:max-[600px]:py-[9px]"
+        href="/pdf/pavel-novaikin-frontend.pdf"
+        download
+      >Download PDF <span aria-hidden="true">↓</span></a>
+    </div>
+  </nav>
+</header>

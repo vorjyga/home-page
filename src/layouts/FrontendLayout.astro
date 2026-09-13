@@ -1,0 +1,8 @@
+---
+import Layout from './Layout.astro';
+import FrontendHeader from '../components/FrontendHeader.astro';
+---
+<Layout {...Astro.props}>
+  <FrontendHeader />
+  <slot />
+</Layout>

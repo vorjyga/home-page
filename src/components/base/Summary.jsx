@@ -1,6 +1,6 @@
-import { summary } from '../../data/index.js'
+import { summary as defaultSummary } from '../../data/index.js'
 
-function Summary() {
+function Summary({ summary = defaultSummary } = {}) {
     return (
         <section className="mt-5 print:mt-4">
             <div className="flex items-center gap-4">

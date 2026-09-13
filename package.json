@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "pdf": "python3 scripts/generate-resume-pdfs.py",
+    "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",

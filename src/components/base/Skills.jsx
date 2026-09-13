@@ -1,6 +1,6 @@
-import { skills } from '../../data/index.js'
+import { skills as defaultSkills } from '../../data/index.js'
 
-function Skills() {
+function Skills({ skills = defaultSkills } = {}) {
     return (
         <section className="mt-10">
             <div className="flex items-center gap-4">
@@ -8,15 +8,15 @@ function Skills() {
                 <span className="h-px flex-1 bg-slate-200" />
             </div>
 
-            <div className="mt-6 space-y-3">
+            <div className="mt-6 space-y-1">
                 {skills.map(({ area, items }) => (
-                    <div key={area} className="flex items-start gap-6">
+                    <div key={area} className="flex items-start gap-2">
                         <div className="w-[30%] shrink-0 pt-2 text-slate-500 sm:w-52 sm:whitespace-nowrap">{area}</div>
                         <div className="flex flex-wrap gap-2">
                             {items.map((item) => (
                                 <span
                                     key={item}
-                                    className="rounded-md bg-slate-100 p-2 text-slate-700"
+                                    className="rounded-md bg-slate-100 px-2 py-1 text-slate-700"
                                 >
                                     {item}
                                 </span>

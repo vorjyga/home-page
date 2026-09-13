@@ -64,6 +64,48 @@ In the website's Umami dashboard:
 
 Events have no recipient names: keep your mapping from codes to applications separately. Counts measure recorded opens, not proof of reading or unique people. Blocking scripts prevents collection. Do not add UTM parameters to internal navigation: they would count additional tagged entries.
 
+### Ad-block-resistant tagged visits
+
+The Cloudflare Worker in `src/worker.js` can also record tagged document requests
+before serving `/frontend/*` and `/fullstack/*`. Because this happens at the edge,
+browser extensions cannot block the write. The Worker stores no IP address. It
+keeps the tag, path, referrer, user agent, two-letter Cloudflare country code, a
+likely-bot flag, and the visit time.
+
+Create and bind the production D1 database once:
+
+```sh
+npx wrangler d1 create cv-analytics
+```
+
+Accept Wrangler's offer to add the binding to `wrangler.jsonc`, then change its
+generated `binding` value to `ANALYTICS_DB` and add
+`"migrations_dir": "migrations"` to that D1 entry. Apply the schema:
+
+```sh
+npx wrangler d1 migrations apply cv-analytics --remote
+```
+
+After deploying, inspect totals privately in Cloudflare → D1 → `cv-analytics` →
+Console with:
+
+```sql
+SELECT
+  tag,
+  path,
+  COUNT(*) AS total_opens,
+  SUM(CASE WHEN is_likely_bot = 0 THEN 1 ELSE 0 END) AS probable_human_opens,
+  MAX(visited_at) AS last_opened_at
+FROM cv_visits
+GROUP BY tag, path
+ORDER BY last_opened_at DESC;
+```
+
+The existing Umami events remain useful for sessions and navigation. D1 is the
+more reliable source for tagged link openings. Link previews and security scanners
+can open a URL before a person does, so the query reports them separately when the
+user agent identifies them.
+
 ## Deployment
 
 ```sh

@@ -2,8 +2,16 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "home-page",
   "compatibility_date": "2026-09-13",
+  "main": "./src/worker.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/frontend",
+      "/frontend/*",
+      "/fullstack",
+      "/fullstack/*"
+    ],
     "html_handling": "force-trailing-slash",
     "not_found_handling": "none"
   }

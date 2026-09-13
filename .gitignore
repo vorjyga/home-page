@@ -25,6 +25,7 @@ dist-ssr
 
 # Astro generated types
 .astro
+.claude
 
 # Cloudflare local state
 .wrangler/

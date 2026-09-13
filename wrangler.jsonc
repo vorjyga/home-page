@@ -17,10 +17,10 @@
 	},
 	"d1_databases": [
 		{
-			"binding": "cv_analytics",
+			"binding": "ANALYTICS_DB",
 			"database_name": "cv-analytics",
 			"database_id": "07b1cd3f-83ab-40e8-b52e-4af447d5f781",
-			"remote": true
+			"migrations_dir": "migrations"
 		}
 	]
 }

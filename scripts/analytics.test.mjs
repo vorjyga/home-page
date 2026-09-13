@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { initializeAnalytics } from '../src/scripts/analytics.js';
 
-function setup(search, { blockedStorage = false, tracker = true } = {}) {
-  const calls = [], listeners = {}, storage = new Map();
+function setup(search, { blockedStorage = false, tracker = true, sessionReady = true } = {}) {
+  const calls = [], listeners = {}, storage = new Map(), timers = [];
   let load;
   const win = {
     location: { search, pathname: '/frontend/', href: `https://novaikin.com/frontend/${search}` },
@@ -11,7 +11,11 @@ function setup(search, { blockedStorage = false, tracker = true } = {}) {
       setItem(key, value) { if (blockedStorage) throw Error('blocked'); storage.set(key, value); },
       getItem(key) { if (blockedStorage) throw Error('blocked'); return storage.get(key); },
     },
-    umami: tracker ? { track: (...args) => { calls.push(args); } } : undefined,
+    umami: tracker ? {
+      track: (...args) => { calls.push(args); },
+      getSession: () => ({ cache: sessionReady ? 'ready' : '' }),
+    } : undefined,
+    setTimeout: (callback) => { timers.push(callback); },
   };
   const doc = {
     createElement: () => ({ dataset: {}, addEventListener: (_, fn) => { load = fn; } }),
@@ -19,7 +23,12 @@ function setup(search, { blockedStorage = false, tracker = true } = {}) {
     addEventListener: (name, fn) => { listeners[name] = fn; },
   };
   initializeAnalytics(win, doc, { scriptUrl: 'https://cloud.umami.is/script.js', websiteId: 'test' });
-  return { calls, win, doc, listeners, load: () => load() };
+  return {
+    calls, win, doc, listeners,
+    load: () => load(),
+    runTimer: () => timers.shift()?.(),
+    pendingTimers: () => timers.length,
+  };
 }
 test('tagged entry is one custom event and does not duplicate automatic pageviews', () => {
   const s = setup('?utm=xxXXxx');
@@ -44,4 +53,15 @@ test('blocked storage and unavailable analytics do not break the page', () => {
 test('untrusted tags are bounded and kept as data', () => {
   const s = setup('?utm=' + 'x'.repeat(600)); s.load();
   assert.equal(s.calls[0][1].tag.length, 200);
+});
+
+test('tagged event waits until the automatic pageview establishes a session', () => {
+  const s = setup('?utm=company-a', { sessionReady: false });
+  s.load();
+  assert.equal(s.calls.length, 0);
+  assert.equal(s.pendingTimers(), 1);
+
+  s.win.umami.getSession = () => ({ cache: 'session-ready' });
+  s.runTimer();
+  assert.deepEqual(s.calls, [['cv-link-open', { tag: 'company-a', path: '/frontend/' }]]);
 });

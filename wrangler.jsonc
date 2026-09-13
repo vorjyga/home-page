@@ -1,18 +1,26 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "home-page",
-  "compatibility_date": "2026-09-13",
-  "main": "./src/worker.js",
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS",
-    "run_worker_first": [
-      "/frontend",
-      "/frontend/*",
-      "/fullstack",
-      "/fullstack/*"
-    ],
-    "html_handling": "force-trailing-slash",
-    "not_found_handling": "none"
-  }
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "home-page",
+	"compatibility_date": "2026-09-13",
+	"main": "./src/worker.js",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"run_worker_first": [
+			"/frontend",
+			"/frontend/*",
+			"/fullstack",
+			"/fullstack/*"
+		],
+		"html_handling": "force-trailing-slash",
+		"not_found_handling": "none"
+	},
+	"d1_databases": [
+		{
+			"binding": "cv_analytics",
+			"database_name": "cv-analytics",
+			"database_id": "07b1cd3f-83ab-40e8-b52e-4af447d5f781",
+			"remote": true
+		}
+	]
 }

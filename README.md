@@ -71,3 +71,32 @@ docker compose up -d --build
 ```
 
 nginx listens on port 3000 behind the existing Traefik setup. Unknown routes and missing PDFs return 404. Deploying the new image enables the configured analytics on the production domain. Production delivery to Umami should be checked after deployment with one known test tag.
+
+## Cloudflare Workers Static Assets
+
+`wrangler.jsonc` publishes the static `dist` directory as `home-page`.
+No Astro SSR adapter, Worker script, or Docker container is required.
+
+In Cloudflare Workers Builds, select the GitHub repository and use:
+
+- Project name: `home-page` (must match the Wrangler configuration).
+- Build command: `npm run build`.
+- Deploy command: `npx wrangler deploy`.
+- Root directory: repository root.
+
+Commit and push the configuration, public rules, and dependency lockfile before
+starting the deployment. `public/_redirects` and `public/_headers` are copied into
+`dist` by Astro. Old CV addresses redirect to `/frontend/*`; unmatched paths return
+404 rather than the homepage. Hashed assets get immutable browser caching, while
+CV pages and PDF files are revalidated.
+
+First verify the `workers.dev` address, then connect `novaikin.com` as a custom
+domain. Umami intentionally only runs on the production domain, not workers.dev.
+The existing Vultr deployment can keep running until the domain has been moved.
+
+Local deployment validation (does not publish):
+
+```sh
+npm run build
+npx wrangler deploy --dry-run
+```

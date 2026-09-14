@@ -31,12 +31,17 @@ Both profiles have actual downloadable files under `public/pdf/`. Every frontend
 Regenerate after editing résumé data:
 
 ```sh
-python3 -m pip install -r scripts/requirements-pdf.txt
 npm run pdf
 npm run build
 ```
 
-The generator reads `src/data/resumes.js` through Node.js. Commit regenerated PDFs along with content edits. Python is only needed to regenerate files; normal builds and production serving use the committed files. Review page breaks after significant content changes.
+The generator starts Astro and prints the actual `/frontend/` and `/fullstack/`
+pages with Chrome or Chromium, so the website and downloadable PDFs share the
+same content, typography, spacing, and print styles. Set `CHROME_BIN` if the
+browser executable is not in a standard location. Commit regenerated PDFs along
+with content edits. Python and Chrome are only needed to regenerate files;
+normal builds and production serving use the committed files. Review page breaks
+after significant content changes.
 
 ## Umami analytics
 

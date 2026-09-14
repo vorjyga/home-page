@@ -5,6 +5,7 @@
        (date, page title, URL). Page spacing is restored via
        .container padding below. */
     @page {
+        size: A4;
         margin: 0;
     }
 

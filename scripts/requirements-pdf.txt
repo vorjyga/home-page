@@ -1,1 +1,2 @@
-reportlab>=4,<5
+# PDF generation uses the installed Chrome/Chromium browser and has no Python
+# package dependencies. This file remains for compatibility with existing setup.

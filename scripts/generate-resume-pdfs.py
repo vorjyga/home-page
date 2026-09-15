@@ -14,6 +14,10 @@ OUTPUT = ROOT / "public" / "pdf"
 HOST = "127.0.0.1"
 PORT = 4322
 BASE_URL = f"http://{HOST}:{PORT}"
+PDF_FILENAMES = {
+    "frontend": "cv-Pavel-Novaikin-senior-frontend.pdf",
+    "fullstack": "cv-Pavel-Novaikin-senior-fullstack.pdf",
+}
 
 
 def find_chrome():
@@ -48,7 +52,7 @@ def wait_for_server(process):
 
 
 def print_pdf(chrome, profile, user_data_dir, temporary_output):
-    target = temporary_output / f"pavel-novaikin-{profile}.pdf"
+    target = temporary_output / PDF_FILENAMES[profile]
     process = subprocess.Popen(
         [
             chrome,

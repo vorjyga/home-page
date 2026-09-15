@@ -41,7 +41,7 @@ test('untagged navigation does not create another tagged entry', () => {
 });
 test('standard utm_content works; PDF clicks retain the entry tag', () => {
   const s = setup('?utm_content=campaign-42'); s.load();
-  s.listeners.click({ target: { closest: () => ({ href: '/pdf/pavel-novaikin-frontend.pdf' }) } });
+  s.listeners.click({ target: { closest: () => ({ href: '/pdf/cv-Pavel-Novaikin-senior-frontend.pdf' }) } });
   assert.equal(s.calls[1][0], 'cv-pdf-download');
   assert.equal(s.calls[1][1].tag, 'campaign-42');
 });

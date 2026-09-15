@@ -1,6 +1,23 @@
 import { profile as defaultProfile, contacts as defaultContacts } from '../../data/index.js'
 
-function Header({ profile = defaultProfile, contacts = defaultContacts } = {}) {
+function ContactLink({ icon, label, href, className = '' }) {
+    const isExternal = href.startsWith('http')
+
+    return (
+        <a
+            href={href}
+            {...(isExternal && { target: '_blank', rel: 'noreferrer' })}
+            className={`items-center gap-1 text-slate-700 transition-colors hover:text-indigo-600 ${className}`}
+        >
+            <svg className="h-5 w-5 shrink-0" aria-hidden="true">
+                <use href={`/icons.svg#${icon}`} />
+            </svg>
+            <span className="text-base">{label}</span>
+        </a>
+    )
+}
+
+function Header({ profile = defaultProfile, contacts = defaultContacts, printWebsiteHref } = {}) {
     return (
         <header className="flex flex-col items-center gap-3 text-center">
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
@@ -13,19 +30,24 @@ function Header({ profile = defaultProfile, contacts = defaultContacts } = {}) {
             </p>
             <ul className="flex flex-wrap justify-center items-center gap-x-5 gap-y-2 max-w-3/4">
                 {contacts.map(({ id, icon, label, href }) => {
-                    const isExternal = href.startsWith('http')
+                    const hasPrintLink = id === 'website' && printWebsiteHref
+
                     return (
                         <li key={id}>
-                            <a
+                            <ContactLink
+                                icon={icon}
+                                label={label}
                                 href={href}
-                                {...(isExternal && { target: '_blank', rel: 'noreferrer' })}
-                                className="flex items-center gap-1 text-slate-700 transition-colors hover:text-indigo-600"
-                            >
-                                <svg className="h-5 w-5 shrink-0" aria-hidden="true">
-                                    <use href={`/icons.svg#${icon}`} />
-                                </svg>
-                                <span className="text-base">{label}</span>
-                            </a>
+                                className={hasPrintLink ? 'flex print:hidden' : 'flex'}
+                            />
+                            {hasPrintLink && (
+                                <ContactLink
+                                    icon={icon}
+                                    label={label}
+                                    href={printWebsiteHref}
+                                    className="hidden print:flex"
+                                />
+                            )}
                         </li>
                     )
                 })}
